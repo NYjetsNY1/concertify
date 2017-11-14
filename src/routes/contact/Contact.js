@@ -18,24 +18,31 @@ class Contact extends React.Component {
     title: PropTypes.string.isRequired,
   };
 
+  // if we want to make our own proxy
+  // git clone https://github.com/Rob--W/cors-anywhere.git
+  // cd cors-anywhere/
+  // npm install
+  // heroku create
+  // git push heroku master
   componentDidMount() {
-    const options = {
-      url:
-        'https://api.setlist.fm/rest/1.0/artist/07e748f1-075e-428d-85dc-ce3be434e906/setlists?p=1',
-      headers: {
-        'x-api-key': '80231ae9-f9b4-40e0-8865-70baee8fe533',
-        Accept: 'application/json',
-      },
-    };
-
-    function callback(error, response, body) {
-      if (!error && response.statusCode === 200) {
-        console.log(response);
-        console.log(body);
+        const options = {
+          url:
+            'https://cors-anywhere.herokuapp.com/https://cors-anywhere.herokuapp.com/https://api.setlist.fm/rest/1.0/artist/07e748f1-075e-428d-85dc-ce3be434e906/setlists?p=1',
+          headers: {
+            'x-api-key': '80231ae9-f9b4-40e0-8865-70baee8fe533',
+            Accept: 'application/json',
+            origin: 'https://api.setlist.fm/rest/1.0/artist/07e748f1-075e-428d-85dc-ce3be434e906/setlists?p=1'
+          },
+        };
+    
+        function callback(error, response, body) {
+          if (!error && response.statusCode === 200) {
+            console.log(response);
+            console.log(body);
+          }
+        }
+        request(options, callback);
       }
-    }
-    request(options, callback);
-  }
 
   render() {
     return (
