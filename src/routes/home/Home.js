@@ -23,12 +23,12 @@ class Home extends React.Component {
         <form method="post">
           <div className={s.formGroup}>
             <label className={s.label} htmlFor="usernameOrEmail">
-              Enter Artist Name:
               <input
                 className={s.input}
                 id="usernameOrEmail"
                 type="text"
                 name="usernameOrEmail"
+                placeholder="ArtistName"
                 autoFocus // eslint-disable-line jsx-a11y/no-autofocus
               />
             </label>
@@ -36,7 +36,7 @@ class Home extends React.Component {
 
           <div className={s.formGroup}>
             <button className={s.button} type="submit">
-              Get Playlist
+              <a href="about">Get Playlist</a>
             </button>
           </div>
         </form>
