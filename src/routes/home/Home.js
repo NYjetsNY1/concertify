@@ -8,39 +8,38 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Home.css';
 
 class Home extends React.Component {
-  static propTypes = {
-    news: PropTypes.arrayOf(
-      PropTypes.shape({
-        title: PropTypes.string.isRequired,
-        link: PropTypes.string.isRequired,
-        content: PropTypes.string,
-      }),
-    ).isRequired,
-  };
-
   render() {
     return (
-      <div className={s.root}>
+      <div className={s.banner}>
         <div className={s.container}>
-          <h1>React.js News</h1>
-          {this.props.news.map(item => (
-            <article key={item.link} className={s.newsItem}>
-              <h1 className={s.newsTitle}>
-                <a href={item.link}>{item.title}</a>
-              </h1>
-              <div
-                className={s.newsDesc}
-                // eslint-disable-next-line react/no-danger
-                dangerouslySetInnerHTML={{ __html: item.content }}
-              />
-            </article>
-          ))}
+          <h1 className={s.bannerTitle}>Welcome To Concertify</h1>
         </div>
+        <hr />
+
+        <form method="post">
+          <div className={s.formGroup}>
+            <label className={s.label} htmlFor="usernameOrEmail">
+              Enter Artist Name:
+              <input
+                className={s.input}
+                id="usernameOrEmail"
+                type="text"
+                name="usernameOrEmail"
+                autoFocus // eslint-disable-line jsx-a11y/no-autofocus
+              />
+            </label>
+          </div>
+
+          <div className={s.formGroup}>
+            <button className={s.button} type="submit">
+              Get Playlist
+            </button>
+          </div>
+        </form>
       </div>
     );
   }
