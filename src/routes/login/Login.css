@@ -112,6 +112,16 @@
   background: #2795e9;
 }
 
+.spotify {
+  border-color: #1db954;
+  background: #1db954;
+  composes: button;
+}
+
+.spotify:hover {
+  background: #008000;
+}
+
 .icon {
   display: inline-block;
   margin: -2px 12px -2px 0;
