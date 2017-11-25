@@ -23,7 +23,7 @@ class Login extends React.Component {
         <div className={s.container}>
           <h1>{this.props.title}</h1>
           <div className={s.formGroup}>
-            <a className={s.spotify} href="/login/spotify">
+            <a className={s.spotify} href="/auth">
               {/*
               <svg
                 className={s.icon}
