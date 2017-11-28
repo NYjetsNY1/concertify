@@ -25,24 +25,47 @@ class Contact extends React.Component {
   // heroku create
   // git push heroku master
   componentDidMount() {
-        const options = {
-          url:
-            'https://cors-anywhere.herokuapp.com/https://api.setlist.fm/rest/1.0/artist/07e748f1-075e-428d-85dc-ce3be434e906/setlists?p=1',
-          headers: {
-            'x-api-key': '80231ae9-f9b4-40e0-8865-70baee8fe533',
-            Accept: 'application/json',
-            origin: 'https://api.setlist.fm/rest/1.0/artist/07e748f1-075e-428d-85dc-ce3be434e906/setlists?p=1'
-          },
-        };
+
+    let artistName = "Big%20Sean";
+
+    const getArtist = {
+      url:
+        'https://cors-anywhere.herokuapp.com/https://api.setlist.fm/rest/1.0/search/artists?artistName=' + artistName + '&p=1&sort=sortName',
+      headers: {
+        'x-api-key': '80231ae9-f9b4-40e0-8865-70baee8fe533',
+        Accept: 'application/json',
+        origin: 'https://api.setlist.fm/rest/1.0/search/artists?artistName=' + artistName + '&p=1&sort=sortName'
+      },
+    };
+
+    const getSetlist = {
+      url:
+        'https://cors-anywhere.herokuapp.com/https://api.setlist.fm/rest/1.0/artist/07e748f1-075e-428d-85dc-ce3be434e906/setlists?p=1',
+      headers: {
+        'x-api-key': '80231ae9-f9b4-40e0-8865-70baee8fe533',
+        Accept: 'application/json',
+        origin: 'https://api.setlist.fm/rest/1.0/artist/07e748f1-075e-428d-85dc-ce3be434e906/setlists?p=1'
+      },
+    };
     
-        function callback(error, response, body) {
-          if (!error && response.statusCode === 200) {
-            console.log(response);
-            console.log(body);
-          }
-        }
-        request(options, callback);
+
+    function callbackArtist(error, response, body) {
+      if (!error && response.statusCode === 200) {
+        console.log(response);
+        console.log(body);
       }
+    }
+
+    function callbackSetlist(error, response, body) {
+      if (!error && response.statusCode === 200) {
+        console.log(response);
+        console.log(body);
+      }
+    }
+
+    request(getArtist, callback);
+    request(getSetList, callback);
+  }
 
   render() {
     return (
