@@ -25,46 +25,59 @@ class Contact extends React.Component {
   // heroku create
   // git push heroku master
   componentDidMount() {
-
-    let artistName = "Big%20Sean";
+    const artistName = 'Big%20Sean';
+    const artistActualName = "Big Sean";
+    let MBID = "";
+    let makeRequest = false;
 
     const getArtist = {
-      url:
-        'https://cors-anywhere.herokuapp.com/https://api.setlist.fm/rest/1.0/search/artists?artistName=' + artistName + '&p=1&sort=sortName',
+      url: `https://cors-anywhere.herokuapp.com/https://api.setlist.fm/rest/1.0/search/artists?artistName=${
+        artistName
+      }&p=1&sort=sortName`,
       headers: {
         'x-api-key': '80231ae9-f9b4-40e0-8865-70baee8fe533',
         Accept: 'application/json',
-        origin: 'https://api.setlist.fm/rest/1.0/search/artists?artistName=' + artistName + '&p=1&sort=sortName'
+        origin: `https://api.setlist.fm/rest/1.0/search/artists?artistName=${
+          artistName
+        }&p=1&sort=sortName`,
       },
     };
-
-    const getSetlist = {
-      url:
-        'https://cors-anywhere.herokuapp.com/https://api.setlist.fm/rest/1.0/artist/07e748f1-075e-428d-85dc-ce3be434e906/setlists?p=1',
-      headers: {
-        'x-api-key': '80231ae9-f9b4-40e0-8865-70baee8fe533',
-        Accept: 'application/json',
-        origin: 'https://api.setlist.fm/rest/1.0/artist/07e748f1-075e-428d-85dc-ce3be434e906/setlists?p=1'
-      },
-    };
-    
 
     function callbackArtist(error, response, body) {
       if (!error && response.statusCode === 200) {
-        console.log(response);
-        console.log(body);
+        body = JSON.parse(body);        
+        console.log(body.artist);
+        for (let i = 0; i < body.artist.length; i++) {
+          if ((body.artist[i].name === artistActualName) && body.artist[i].tmid != undefined) {
+            console.log("got artist!");
+            MBID = body.artist[i].mbid;
+            makeRequest = true;
+          }
+        }
+        const getSetlist = {
+          url:
+            'https://cors-anywhere.herokuapp.com/https://api.setlist.fm/rest/1.0/artist/' + MBID + '/setlists?p=1',
+          headers: {
+            'x-api-key': '80231ae9-f9b4-40e0-8865-70baee8fe533',
+            Accept: 'application/json',
+            origin:
+              'https://api.setlist.fm/rest/1.0/artist/' + MBID + '/setlists?p=1',
+          },
+        };
+
+        if (makeRequest) {
+          request(getSetlist, callbackSetlist);  
+        }      
       }
     }
 
     function callbackSetlist(error, response, body) {
       if (!error && response.statusCode === 200) {
-        console.log(response);
+        //console.log(response);
         console.log(body);
       }
     }
-
     request(getArtist, callbackArtist);
-    request(getSetlist, callbackSetlist);
   }
 
   render() {
