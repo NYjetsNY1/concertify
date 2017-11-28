@@ -16,11 +16,8 @@ const title = 'Auth Page';
 function action() {
   return {
     chunks: ['auth'],
-    title: title,
-    component: (
-      <Layout>
-      </Layout>
-    ),
+    title,
+    component: <Layout />,
   };
 }
 
