@@ -27,7 +27,7 @@ class Contact extends React.Component {
   componentDidMount() {
         const options = {
           url:
-            'https://cors-anywhere.herokuapp.com/https://cors-anywhere.herokuapp.com/https://api.setlist.fm/rest/1.0/artist/07e748f1-075e-428d-85dc-ce3be434e906/setlists?p=1',
+            'https://cors-anywhere.herokuapp.com/https://api.setlist.fm/rest/1.0/artist/07e748f1-075e-428d-85dc-ce3be434e906/setlists?p=1',
           headers: {
             'x-api-key': '80231ae9-f9b4-40e0-8865-70baee8fe533',
             Accept: 'application/json',
