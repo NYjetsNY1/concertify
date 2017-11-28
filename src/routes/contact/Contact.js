@@ -63,8 +63,8 @@ class Contact extends React.Component {
       }
     }
 
-    request(getArtist, callback);
-    request(getSetList, callback);
+    request(getArtist, callbackArtist);
+    request(getSetlist, callbackSetlist);
   }
 
   render() {
