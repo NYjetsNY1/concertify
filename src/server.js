@@ -29,6 +29,7 @@ import models from './data/models';
 import schema from './data/schema';
 import assets from './assets.json'; // eslint-disable-line import/no-unresolved
 import config from './config';
+import request from 'request';
 
 const app = express();
 
@@ -92,6 +93,48 @@ app.get(
     res.cookie('id_token', token, { maxAge: 1000 * expiresIn, httpOnly: true });
     res.redirect('/');
   },
+);
+
+app.get('/auth',
+  passport.authenticate('spotify', {
+    scope: ['playlist-read-private', 'playlist-read-collaborative']
+  }),
+  function(req, res) {});
+
+app.get('/auth/callback',
+  passport.authenticate('spotify', { failureRedirect: '/login' }),
+  function(req, res) {
+
+    // Configure test request
+    var url = 'https://api.spotify.com/v1/users/' + req.user.id +
+              '/playlists?limit=3';
+    var cors_url = 'https://cors-anywhere.herokuapp.com/' +
+                   'https://cors-anywhere.herokuapp.com/' + url;
+    var bearer_token = 'Bearer ' + req.user.access_token;
+    const options = {
+      url: cors_url,
+      headers: {
+        'Authorization': bearer_token,
+        Accept: 'application/json',
+        origin: url
+      },
+    };
+    function callback(error, response, body) {
+      if (!error && response.statusCode === 200) {
+        var parsed_body = JSON.parse(body);
+        var playlists = "Playlists include: ";
+        for (var i = 0; i < parsed_body.items.length; ++i) {
+          if (i == parsed_body.items.length - 1) {
+            playlists += 'and ' + parsed_body.items[i].name + '.';
+          } else {
+            playlists += parsed_body.items[i].name + ', ';
+          }
+        }
+        res.json(playlists);
+      }
+    }
+    request(options, callback);
+  }
 );
 
 //

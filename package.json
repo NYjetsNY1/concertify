@@ -6,7 +6,12 @@
     "node": "6.11.4",
     "npm": ">=3.10"
   },
-  "browserslist": [">1%", "last 4 versions", "Firefox ESR", "not ie < 9"],
+  "browserslist": [
+    ">1%",
+    "last 4 versions",
+    "Firefox ESR",
+    "not ie < 9"
+  ],
   "dependencies": {
     "babel-polyfill": "7.0.0-beta.3",
     "bluebird": "^3.5.1",
@@ -25,10 +30,10 @@
     "normalize.css": "^7.0.0",
     "passport": "^0.4.0",
     "passport-facebook": "^2.1.1",
+    "passport-spotify": "^0.3.1",
     "pretty-error": "^2.1.1",
     "prop-types": "^15.6.0",
     "query-string": "^5.0.1",
-    "querystring": "^0.2.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "sequelize": "^4.20.3",
@@ -116,9 +121,18 @@
     "webpack-node-externals": "^1.6.0"
   },
   "lint-staged": {
-    "*.{js,jsx}": ["eslint --fix", "git add"],
-    "*.{json,graphql}": ["prettier --write", "git add"],
-    "*.{css,less,styl,scss,sass,sss}": ["stylelint --fix", "git add"]
+    "*.{js,jsx}": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.{json,graphql}": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.{css,less,styl,scss,sass,sss}": [
+      "stylelint --fix",
+      "git add"
+    ]
   },
   "scripts": {
     "precommit": "lint-staged",
