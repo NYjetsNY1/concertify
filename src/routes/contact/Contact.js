@@ -54,7 +54,7 @@ class Contact extends React.Component {
             body.artist[i].name === artistActualName &&
             body.artist[i].tmid != undefined
           ) {
-            console.log('got artist!');
+            //console.log('got artist!');
             MBID = body.artist[i].mbid;
             makeRequest = true;
           }
@@ -78,6 +78,19 @@ class Contact extends React.Component {
       }
     }
 
+    function stringToDate(_date,_format,_delimiter) {
+      let formatLowerCase=_format.toLowerCase();
+      let formatItems=formatLowerCase.split(_delimiter);
+      let dateItems=_date.split(_delimiter);
+      let monthIndex=formatItems.indexOf("mm");
+      let dayIndex=formatItems.indexOf("dd");
+      let yearIndex=formatItems.indexOf("yyyy");
+      let month=parseInt(dateItems[monthIndex]);
+      month -= 1;
+      const formatedDate = new Date(dateItems[yearIndex],month,dateItems[dayIndex]);
+      return formatedDate;
+    }
+
     function callbackSetlist(error, response, body) {
       if (!error && response.statusCode === 200) {
         // console.log(response);
@@ -87,7 +100,8 @@ class Contact extends React.Component {
           if (body.setlist[i].sets.set.length > 0) {
             const myObj = {};
             myObj.set = body.setlist[i].sets.set;
-            myObj.eventDate = body.setlist[i].eventDate;
+            //console.log(body.setlist[i].eventDate);
+            myObj.eventDate = stringToDate(body.setlist[i].eventDate,"dd-MM-yyyy","-");            
             myObj.name = body.setlist[i].venue.name;
             myArrayOfObjects.push(myObj);
           }
