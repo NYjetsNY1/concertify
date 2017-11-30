@@ -11,6 +11,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Contact.css';
+
 // import $ from 'jquery';
 
 class Contact extends React.Component {
@@ -29,7 +30,7 @@ class Contact extends React.Component {
     const artistActualName = 'Big Sean';
     let MBID = '';
     let makeRequest = false;
-    let myArrayOfObjects = [];
+    const myArrayOfObjects = [];
 
     const getArtist = {
       url: `https://cors-anywhere.herokuapp.com/https://api.setlist.fm/rest/1.0/search/artists?artistName=${
@@ -81,10 +82,10 @@ class Contact extends React.Component {
       if (!error && response.statusCode === 200) {
         // console.log(response);
         body = JSON.parse(body);
-        //console.log(body.setlist);
+        // console.log(body.setlist);
         for (let i = 0; i < body.setlist.length; i++) {
           if (body.setlist[i].sets.set.length > 0) {
-            let myObj = {};
+            const myObj = {};
             myObj.set = body.setlist[i].sets.set;
             myObj.eventDate = body.setlist[i].eventDate;
             myObj.name = body.setlist[i].venue.name;
@@ -92,7 +93,7 @@ class Contact extends React.Component {
           }
         }
         for (let i = 0; i < myArrayOfObjects.length; i++) {
-         console.log(myArrayOfObjects[i]);
+          console.log(myArrayOfObjects[i]);
         }
       }
     }
