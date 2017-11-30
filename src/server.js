@@ -104,6 +104,8 @@ app.get('/auth',
 app.get('/auth/callback',
   passport.authenticate('spotify', { failureRedirect: '/login' }),
   function(req, res) {
+    const expiresIn = 60 * 60 * 24 * 180; // 180 days
+    res.cookie('refresh_token', req.user.refresh_token, { maxAge: 1000 * expiresIn, httpOnly: true });
 
     // Configure test request
     var url = 'https://api.spotify.com/v1/users/' + req.user.id +

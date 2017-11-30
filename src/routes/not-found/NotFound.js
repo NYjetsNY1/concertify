@@ -17,6 +17,11 @@ class NotFound extends React.Component {
     title: PropTypes.string.isRequired,
   };
 
+  componentDidMount() {
+    console.log("HELLO");
+
+  }
+
   render() {
     return (
       <div className={s.root}>
