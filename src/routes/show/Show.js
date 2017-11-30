@@ -23,17 +23,19 @@ class Show extends React.Component {
             <form method="post">
               <div className={s.formGroup}>
                 <h2>All Songs Found:</h2>
-                <p>Song 1</p>
-                <p>Song 2</p>
-                <p>Song 3</p>
-                <p>Song 4</p>
-                <p>Song 5</p>
-                <p>Song 6</p>
-                <p>Song 7</p>
-                <p>Song 8</p>
-                <p>Song 9</p>
-                <p>Song 10</p>
-                <p>Song 11</p>
+                <div className={s.songContainer}>
+                  <p>Song 1</p>
+                  <p>Song 2</p>
+                  <p>Song 3</p>
+                  <p>Song 4</p>
+                  <p>Song 5</p>
+                  <p>Song 6</p>
+                  <p>Song 7</p>
+                  <p>Song 8</p>
+                  <p>Song 9</p>
+                  <p>Song 10</p>
+                  <p>Song 11</p>
+                </div>
               </div>
             </form>
           </div>
@@ -43,17 +45,19 @@ class Show extends React.Component {
             <form method="post">
               <div className={s.formGroup}>
                 <h2>Songs On Spotify</h2>
-                <p>Song 1</p>
-                <p>Song 2</p>
-                <p>Song 5</p>
-                <p>Song 6</p>
-                <p>Song 8</p>
-                <p>Song 9</p>
-                <p>Song 11</p>
-                <p>Song 11</p>
-                <p>Song 11</p>
-                <p>Song 11</p>
-                <p>Song 11</p>
+                <div className={s.songContainer}>
+                  <p>Song 1</p>
+                  <p>Song 2</p>
+                  <p>Song 5</p>
+                  <p>Song 6</p>
+                  <p>Song 8</p>
+                  <p>Song 9</p>
+                  <p>Song 11</p>
+                  <p>Song 11</p>
+                  <p>Song 11</p>
+                  <p>Song 11</p>
+                  <p>Song 11</p>
+                </div>
               </div>
             </form>
           </div>

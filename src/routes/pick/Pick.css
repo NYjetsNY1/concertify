@@ -94,9 +94,9 @@ img {
 .button {
   display: block;
   box-sizing: border-box;
-  margin-left: 40%;
+  margin-left: 10%;
   padding: 10px 16px;
-  width: 30%;
+  width: 60%;
   outline: 0;
   border: 1px solid #373277;
   border-radius: 50px;

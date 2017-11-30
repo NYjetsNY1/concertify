@@ -71,9 +71,9 @@ img {
 .button {
   display: block;
   box-sizing: border-box;
-  margin-left: 40%;
+  margin-left: 33%;
   padding: 10px 16px;
-  width: 30%;
+  width: 33%;
   outline: 0;
   border: 1px solid #373277;
   border-radius: 50px;
@@ -89,8 +89,14 @@ img {
 .submitBtn {
   width: 100%;
   text-align: center;
+  margin-top: 50px;
 }
 
 .formGroup {
   width: auto;
+}
+
+.songContainer {
+  overflow-y: auto;
+  height: 200px;
 }
