@@ -25,10 +25,11 @@ class Contact extends React.Component {
   // heroku create
   // git push heroku master
   componentDidMount() {
-    const artistName = 'Lorde';
-    const artistActualName = 'Lorde';
+    const artistName = 'Big%20Sean';
+    const artistActualName = 'Big Sean';
     let MBID = '';
     let makeRequest = false;
+    let myArrayOfObjects = [];
 
     const getArtist = {
       url: `https://cors-anywhere.herokuapp.com/https://api.setlist.fm/rest/1.0/search/artists?artistName=${
@@ -83,8 +84,15 @@ class Contact extends React.Component {
         //console.log(body.setlist);
         for (let i = 0; i < body.setlist.length; i++) {
           if (body.setlist[i].sets.set.length > 0) {
-            console.log(body.setlist[i].sets);
+            let myObj = {};
+            myObj.set = body.setlist[i].sets.set;
+            myObj.eventDate = body.setlist[i].eventDate;
+            myObj.name = body.setlist[i].venue.name;
+            myArrayOfObjects.push(myObj);
           }
+        }
+        for (let i = 0; i < myArrayOfObjects.length; i++) {
+         console.log(myArrayOfObjects[i]);
         }
       }
     }
