@@ -25,9 +25,9 @@ class Contact extends React.Component {
   // heroku create
   // git push heroku master
   componentDidMount() {
-    const artistName = 'Big%20Sean';
-    const artistActualName = "Big Sean";
-    let MBID = "";
+    const artistName = 'Lorde';
+    const artistActualName = 'Lorde';
+    let MBID = '';
     let makeRequest = false;
 
     const getArtist = {
@@ -45,36 +45,47 @@ class Contact extends React.Component {
 
     function callbackArtist(error, response, body) {
       if (!error && response.statusCode === 200) {
-        body = JSON.parse(body);        
+        body = JSON.parse(body);
         console.log(body.artist);
         for (let i = 0; i < body.artist.length; i++) {
-          if ((body.artist[i].name === artistActualName) && body.artist[i].tmid != undefined) {
-            console.log("got artist!");
+          if (
+            body.artist[i].name === artistActualName &&
+            body.artist[i].tmid != undefined
+          ) {
+            console.log('got artist!');
             MBID = body.artist[i].mbid;
             makeRequest = true;
           }
         }
         const getSetlist = {
-          url:
-            'https://cors-anywhere.herokuapp.com/https://api.setlist.fm/rest/1.0/artist/' + MBID + '/setlists?p=1',
+          url: `https://cors-anywhere.herokuapp.com/https://api.setlist.fm/rest/1.0/artist/${
+            MBID
+          }/setlists?p=1`,
           headers: {
             'x-api-key': '80231ae9-f9b4-40e0-8865-70baee8fe533',
             Accept: 'application/json',
-            origin:
-              'https://api.setlist.fm/rest/1.0/artist/' + MBID + '/setlists?p=1',
+            origin: `https://api.setlist.fm/rest/1.0/artist/${
+              MBID
+            }/setlists?p=1`,
           },
         };
 
         if (makeRequest) {
-          request(getSetlist, callbackSetlist);  
-        }      
+          request(getSetlist, callbackSetlist);
+        }
       }
     }
 
     function callbackSetlist(error, response, body) {
       if (!error && response.statusCode === 200) {
-        //console.log(response);
-        console.log(body);
+        // console.log(response);
+        body = JSON.parse(body);
+        //console.log(body.setlist);
+        for (let i = 0; i < body.setlist.length; i++) {
+          if (body.setlist[i].sets.set.length > 0) {
+            console.log(body.setlist[i].sets);
+          }
+        }
       }
     }
     request(getArtist, callbackArtist);
