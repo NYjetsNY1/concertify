@@ -36,7 +36,7 @@ class Home extends React.Component {
 
           <div className={s.formGroup}>
             <button className={s.button} type="submit">
-              <a href="login">Get Playlist</a>
+              <a href="pick">Get Playlist</a>
             </button>
           </div>
         </form>
