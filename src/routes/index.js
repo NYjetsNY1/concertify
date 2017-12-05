@@ -17,11 +17,15 @@ const routes = {
   children: [
     {
       path: '',
-      load: () => import(/* webpackChunkName: 'home' */ './home'),
+      load: () => import(/* webpackChunkName: 'login' */ './login'),
     },
     {
       path: '/contact',
       load: () => import(/* webpackChunkName: 'contact' */ './contact'),
+    },
+    {
+      path: '/home',
+      load: () => import(/* webpackChunkName: 'home' */ './home'),
     },
     {
       path: '/login',

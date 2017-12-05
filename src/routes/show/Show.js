@@ -11,8 +11,28 @@ import React from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Show.css';
 
+const Song = ({ song }) => { return <p> { song } </p> };
+
 class Show extends React.Component {
+  constructor(props) {
+        super(props);
+        this.state = {
+            songs: [],
+        }
+    }
+
+  componentDidMount(){
+    let data = sessionStorage.getItem('selectedSongs');
+    data = JSON.parse(data);
+    console.log(data);
+    let songs = data.map(d => d.name);
+    console.log(songs)
+    this.setState({songs: songs})
+
+  }
+
   render() {
+    let songInputs = this.state.songs.map((song, index) => (<Song key={index} song={song}/>));
     return (
       <div className={s.banner}>
         <div className={s.container}>
@@ -24,17 +44,7 @@ class Show extends React.Component {
               <div className={s.formGroup}>
                 <h2>All Songs Found:</h2>
                 <div className={s.songContainer}>
-                  <p>Song 1</p>
-                  <p>Song 2</p>
-                  <p>Song 3</p>
-                  <p>Song 4</p>
-                  <p>Song 5</p>
-                  <p>Song 6</p>
-                  <p>Song 7</p>
-                  <p>Song 8</p>
-                  <p>Song 9</p>
-                  <p>Song 10</p>
-                  <p>Song 11</p>
+                  {songInputs}
                 </div>
               </div>
             </form>

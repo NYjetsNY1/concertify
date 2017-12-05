@@ -6,60 +6,190 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
-
+import request from 'request';
 import React from 'react';
+import PropTypes from 'prop-types';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Pick.css';
+import { findDOMNode } from 'react-dom';
+import moment from 'moment';
+
+
+const Venue = ({ venue }) => {
+    return <label htmlFor="usernameOrEmail" className={s.tour_checkbox}>
+            <input
+              id    = { venue }
+              type  = "checkbox"
+              value = { venue }
+              name  = { venue }
+              />{' '}
+              { venue } <br />
+          </label>
+};
+
+const Tour = ({ tour }) => {
+    return <label htmlFor="usernameOrEmail" className={s.tour_checkbox}>
+            <input
+              id="usernameOrEmail"
+              type="checkbox"
+              value="TourA"
+              name="usernameOrEmail"
+              />{' '}
+              {tour} <br />
+          </label>
+};
 
 class Pick extends React.Component {
+  constructor(props) {
+        super(props);
+        this.state = {
+            artistName: "",
+            setListObject: {},
+            tours: [],
+            venues: [],
+            startDate: moment()
+        }
+        this.getVenues = this.getVenues.bind(this)
+        this.getSongSelection = this.getSongSelection.bind(this)
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+  // if we want to make our own proxy
+  // git clone https://github.com/Rob--W/cors-anywhere.git
+  // cd cors-anywhere/
+  // npm install
+  // heroku create
+  // git push heroku master
+  componentDidMount() {
+    const artistName = this.readCookie("artistName").replace(" ", '%20')
+    const artistActualName = this.readCookie("artistName");
+    this.setState({artistName: artistActualName});
+    let MBID = "";
+    let makeRequest = false;
+
+    const getArtist = {
+      url: `https://cors-anywhere.herokuapp.com/https://api.setlist.fm/rest/1.0/search/artists?artistName=${
+        artistName
+      }&p=1&sort=sortName`,
+      headers: {
+        'x-api-key': '80231ae9-f9b4-40e0-8865-70baee8fe533',
+        Accept: 'application/json',
+        origin: `https://api.setlist.fm/rest/1.0/search/artists?artistName=${
+          artistName
+        }&p=1&sort=sortName`,
+      },
+    };
+
+    let callbackArtist = (error, response, body) => {
+      if (!error && response.statusCode === 200) {
+        body = JSON.parse(body);
+        console.log(body.artist);
+        for (let i = 0; i < body.artist.length; i++) {
+          if ((body.artist[i].name === artistActualName) && body.artist[i].tmid != undefined) {
+            console.log("got artist!");
+            MBID = body.artist[i].mbid;
+            makeRequest = true;
+          }
+        }
+        const getSetlist = {
+          url:
+            'https://cors-anywhere.herokuapp.com/https://api.setlist.fm/rest/1.0/artist/' + MBID + '/setlists?p=1',
+          headers: {
+            'x-api-key': '80231ae9-f9b4-40e0-8865-70baee8fe533',
+            Accept: 'application/json',
+            origin:
+              'https://api.setlist.fm/rest/1.0/artist/' + MBID + '/setlists?p=1',
+          },
+        };
+
+        if (makeRequest) {
+          request(getSetlist, callbackSetlist);
+        }
+      }
+    }
+
+    let callbackSetlist = (error, response, body) => {
+      if (!error && response.statusCode === 200) {
+        //console.log(response);
+        let artistConcertInfo = JSON.parse(body)
+        console.log(console.log(artistConcertInfo));
+        console.log(artistConcertInfo.setlist[0].venue.name);
+
+        let venues = this.getVenues(artistConcertInfo.setlist);
+        let tours = this.getTours(artistConcertInfo.setlist)
+
+        console.log(venues);
+        console.log(tours);
+
+        this.setState({
+          setListObject: artistConcertInfo,
+          tours: tours,
+          venues: venues
+        })
+      }
+    }
+    request(getArtist, callbackArtist);
+  }
+
+  readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+  }
+
+  getVenues(setlist) { return setlist.map(concert => { return concert.venue.name }) }
+
+  getTours(setlist) {
+    let tours = new Set();
+    setlist.forEach(concert => {
+      if(concert.tour != undefined && concert.tour.name != undefined && !tours.has(concert.tour.name)){
+        tours.add(concert.tour.name);
+      }
+    })
+    return [...tours];
+  }
+
+  getSongSelection(){
+    console.log(this.state.setListObject.setlist);
+    let my_setlist = this.state.setListObject.setlist;
+    let my_songs = [];
+    my_setlist.forEach(setlist => {
+      console.log(setlist.sets.set[0])
+      my_songs = my_songs.concat(setlist.sets.set[0].song)
+      if(setlist.sets.set.length > 1){
+        my_songs = my_songs.concat(setlist.sets.set[1].song)
+      }
+    })
+    console.log(my_songs)
+    document.cookie = `selectedSongs = ${my_songs}`;
+    sessionStorage.setItem('selectedSongs', JSON.stringify(my_songs));
+  }
+
+  handleChange(date) {
+    this.setState({
+      startDate: date
+    });
+  }
+
   render() {
+    let venueInputs = this.state.venues.map((venue, index )=> (<Venue key={index} venue={venue}/>));
+    let tourInputs = this.state.tours.map((tour, index) => (<Tour key={index} tour={tour}/>));
     return (
       <div className={s.banner}>
         <div className={s.container}>
-          <h1 className={s.bannerTitle}>Artist: Lorde</h1>
+          <h1 className={s.bannerTitle}>Artist: {this.state.artistName}</h1>
         </div>
-
         <div className={s.formLeft}>
           <div className={s.formOne}>
             <form method="post">
               <div className={s.formGroup}>
                 <h2>Select Tours</h2>
-                <label htmlFor="usernameOrEmail" className={s.tour_checkbox}>
-                  <input
-                    id="usernameOrEmail"
-                    type="checkbox"
-                    value="TourA"
-                    name="usernameOrEmail"
-                  />{' '}
-                  TourA <br />
-                </label>
-                <label htmlFor="usernameOrEmail" className={s.tour_checkbox}>
-                  <input
-                    id="usernameOrEmail"
-                    type="checkbox"
-                    value="TourA"
-                    name="usernameOrEmail"
-                  />{' '}
-                  TourB <br />
-                </label>
-                <label htmlFor="usernameOrEmail" className={s.tour_checkbox}>
-                  <input
-                    id="usernameOrEmail"
-                    type="checkbox"
-                    value="TourA"
-                    name="usernameOrEmail"
-                  />{' '}
-                  TourC <br />
-                </label>
-                <label htmlFor="usernameOrEmail" className={s.tour_checkbox}>
-                  <input
-                    id="usernameOrEmail"
-                    type="checkbox"
-                    value="TourA"
-                    name="usernameOrEmail"
-                  />{' '}
-                  TourD <br />
-                </label>
+                <div className={s.selectContainer}> { tourInputs } </div>
               </div>
             </form>
           </div>
@@ -111,50 +241,17 @@ class Pick extends React.Component {
           <div className={s.formThree}>
             <form method="post">
               <div className={s.formGroup}>
-                <h2>Select Shows</h2>
-                <label htmlFor="usernameOrEmail" className={s.tour_checkbox}>
-                  <input
-                    id="usernameOrEmail"
-                    type="checkbox"
-                    value="TourA"
-                    name="usernameOrEmail"
-                  />{' '}
-                  TourA <br />
-                </label>
-                <label htmlFor="usernameOrEmail" className={s.tour_checkbox}>
-                  <input
-                    id="usernameOrEmail"
-                    type="checkbox"
-                    value="TourA"
-                    name="usernameOrEmail"
-                  />{' '}
-                  TourB <br />
-                </label>
-                <label htmlFor="usernameOrEmail" className={s.tour_checkbox}>
-                  <input
-                    id="usernameOrEmail"
-                    type="checkbox"
-                    value="TourA"
-                    name="usernameOrEmail"
-                  />{' '}
-                  TourC <br />
-                </label>
-                <label htmlFor="usernameOrEmail" className={s.tour_checkbox}>
-                  <input
-                    id="usernameOrEmail"
-                    type="checkbox"
-                    value="TourA"
-                    name="usernameOrEmail"
-                  />{' '}
-                  TourD <br />
-                </label>
+                <h2>Select Venues</h2>
+                <div className={s.selectContainer}>{venueInputs}</div>
               </div>
             </form>
           </div>
           <div className={s.formThree}>
-            <button className={s.button} type="submit">
-              <a href="show">Get Playlist</a>
-            </button>
+            <a href="show">
+              <button className={s.button} onClick={this.getSongSelection} type="submit">
+              Get Playlist
+              </button>
+            </a>
           </div>
         </div>
       </div>

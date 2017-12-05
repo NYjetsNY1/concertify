@@ -12,6 +12,17 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Home.css';
 
 class Home extends React.Component {
+  constructor(props){
+    super(props);
+    this.saveArtistName = this.saveArtistName.bind(this)
+  }
+
+  saveArtistName(){
+    let artistName = document.getElementById('artistName').value;
+    console.log(artistName);
+    document.cookie = `artistName = ${artistName}`;
+  }
+
   render() {
     return (
       <div className={s.banner}>
@@ -22,24 +33,25 @@ class Home extends React.Component {
 
         <form method="post">
           <div className={s.formGroup}>
-            <label className={s.label} htmlFor="usernameOrEmail">
+            <label className={s.label} htmlFor="artistName">
               <input
                 className={s.input}
-                id="usernameOrEmail"
+                id="artistName"
                 type="text"
-                name="usernameOrEmail"
+                name="artistName"
                 placeholder="ArtistName"
                 autoFocus // eslint-disable-line jsx-a11y/no-autofocus
               />
             </label>
           </div>
 
-          <div className={s.formGroup}>
-            <button className={s.button} type="submit">
-              <a href="pick">Get Playlist</a>
-            </button>
-          </div>
+
         </form>
+        <div className={s.formGroup}>
+          <a href="/pick"><button className={s.button} onClick={this.saveArtistName}>
+            Get Playlist
+          </button></a>
+        </div>
       </div>
     );
   }

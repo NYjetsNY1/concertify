@@ -158,7 +158,8 @@ app.get(
     res.cookie('access_token', req.user.access_token, {
       maxAge: 1000 * expiresIn
     });
-    createNewPlaylist(req.user.id, req.user.access_token, res);
+    //createNewPlaylist(req.user.id, req.user.access_token, res);
+    res.redirect('/home')
   },
 );
 

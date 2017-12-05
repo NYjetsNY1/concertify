@@ -14,8 +14,9 @@
 }
 
 .root {
-  background: #333;
-  color: #fff;
+  background: white;
+  color: black;
+  border-bottom: solid 1px black;
 }
 
 .container {

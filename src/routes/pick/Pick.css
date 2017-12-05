@@ -112,3 +112,11 @@ img {
 .tour_checkbox {
   width: 100%;
 }
+
+.selectContainer {
+  overflow-y: auto;
+  height: 150px;
+  text-align: left;
+  width: 60%;
+  margin-left: 20%;
+}

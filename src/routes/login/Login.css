@@ -16,7 +16,9 @@
 .container {
   margin: 0 auto;
   padding: 0 0 40px;
-  max-width: 380px;
+  max-width: 480px;
+  text-align: center;
+  margin-top: 100px;
 }
 
 .lead {
@@ -116,6 +118,7 @@
   border-color: #1db954;
   background: #1db954;
   composes: button;
+  border-radius: 25px;
 }
 
 .spotify:hover {

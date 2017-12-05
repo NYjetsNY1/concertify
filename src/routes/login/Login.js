@@ -21,7 +21,7 @@ class Login extends React.Component {
     return (
       <div className={s.root}>
         <div className={s.container}>
-          <h1>{this.props.title}</h1>
+          <h3>{this.props.title}</h3>
           <div className={s.formGroup}>
             <a className={s.spotify} href="/auth">
               {/*
@@ -45,7 +45,7 @@ class Login extends React.Component {
                 />
               </svg>
               */}
-              <span>Log in to Spotify</span>
+              <span>Connect</span>
             </a>
           </div>
         </div>

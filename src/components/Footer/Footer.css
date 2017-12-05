@@ -10,9 +10,16 @@
 @import '../variables.css';
 
 .root {
-  background: #333;
+  background: black;
   color: #fff;
+  bottom: 0px;
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+  bottom: 0px;
+  width: 100%;
+  position: fixed;
 }
+
 
 .container {
   margin: 0 auto;
