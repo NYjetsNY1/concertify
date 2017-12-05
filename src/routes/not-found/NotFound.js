@@ -12,14 +12,70 @@ import PropTypes from 'prop-types';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './NotFound.css';
 
+// from https://www.quirksmode.org/js/cookies.html
+function readCookie(name) {
+  const nameEQ = `${name}=`;
+  const ca = document.cookie.split(';');
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+  }
+  return null;
+}
+
 class NotFound extends React.Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
   };
 
   componentDidMount() {
-    console.log("HELLO");
+    let artist = 'walk the moon  '.trim();
+    let artistName = artist.replace(/ /g, '+');
+    let initTracks = ['jenny', 'headphones', 'shut up and dance', 'so cool'];
+    let completeQueryCount = 0;
+    let unavailableTracks = [];
+    let availableTracks = [];
+    let accessToken = readCookie('access_token');
 
+    initTracks.forEach(trackName => {
+      trackName = trackName.trim();
+      let trackQuery = trackName.replace(/ /g, '+');
+      fetch(
+        `https://api.spotify.com/v1/search?q=artist:${artistName}%20track:${trackQuery}&type=track`,
+        {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      ).then(response => {
+        response.json().then(data => {
+          completeQueryCount++;
+          const tracks = data.tracks;
+          if (tracks.items.length === 0) {
+            // song is not on spotify
+            unavailableTracks.push({
+              artist: artist,
+              track: trackName
+            });
+          } else {
+            // song is there
+            availableTracks.push({
+              artist: data.tracks.items[0].artists[0].name,
+              track: data.tracks.items[0].name,
+              spotifyUri: data.tracks.items[0].uri,
+            });
+          }
+          console.log(data);
+          if(completeQueryCount === initTracks.length){
+            console.log(availableTracks);
+            console.log(unavailableTracks);
+          }
+        });
+      });
+    });
   }
 
   render() {

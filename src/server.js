@@ -95,22 +95,24 @@ app.get(
   },
 );
 
-app.get('/auth',
+app.get(
+  '/auth',
   passport.authenticate('spotify', {
-    scope: ['playlist-modify-public', 'playlist-modify-private']
+    scope: ['playlist-modify-public', 'playlist-modify-private'],
   }),
-  function(req, res) {});
+  (req, res) => {},
+);
 
 function addSongsToPlaylist(bearer_token, options, user_id, playlist_id, res) {
-  let tracks = 'spotify:track:77NNZQSqzLNqh2A9JhLRkg,' +
-               'spotify:track:7tFiyTwD0nx5a1eklYtX2J';
-  let url = 'https://api.spotify.com/v1/users/' + user_id + '/playlists/' +
-            playlist_id + '/tracks?uris=' + tracks;
-  options.url = 'https://cors-anywhere.herokuapp.com/' + url;
+  const tracks =
+    'spotify:track:77NNZQSqzLNqh2A9JhLRkg,' +
+    'spotify:track:7tFiyTwD0nx5a1eklYtX2J';
+  const url = `https://api.spotify.com/v1/users/${user_id}/playlists/${playlist_id}/tracks?uris=${tracks}`;
+  options.url = `https://cors-anywhere.herokuapp.com/${url}`;
   options.headers.origin = url;
   delete options.json;
   function callback(error, response, body) {
-    if (!error && response.statusCode == 200 || response.statusCode == 201) {
+    if ((!error && response.statusCode == 200) || response.statusCode == 201) {
       res.json('The playlist was created.');
     } else {
       res.json('An error occurred when creating the playlist.');
@@ -120,42 +122,44 @@ function addSongsToPlaylist(bearer_token, options, user_id, playlist_id, res) {
 }
 
 function createNewPlaylist(user_id, access_token, res) {
-  let url = 'https://api.spotify.com/v1/users/' + user_id + '/playlists';
-  let cors_url = 'https://cors-anywhere.herokuapp.com/' + url;
-  let bearer_token = 'Bearer ' + access_token;
-  let options = {
+  const url = `https://api.spotify.com/v1/users/${user_id}/playlists`;
+  const cors_url = `https://cors-anywhere.herokuapp.com/${url}`;
+  const bearer_token = `Bearer ${access_token}`;
+  const options = {
     url: cors_url,
     headers: {
       Authorization: bearer_token,
       Accept: 'application/json',
-      origin: url
+      origin: url,
     },
-    method: "POST",
+    method: 'POST',
     json: {
-      description: "Created with Concertify!",
-      name: "Concertify Playlist",
-      public: false
-    }
+      description: 'Created with Concertify!',
+      name: 'Concertify Playlist',
+      public: false,
+    },
   };
   function callback(error, response, body) {
-    if (!error && response.statusCode == 200 || response.statusCode == 201) {
+    if ((!error && response.statusCode == 200) || response.statusCode == 201) {
       addSongsToPlaylist(bearer_token, options, user_id, response.body.id, res);
     }
   }
   request(options, callback);
 }
 
-app.get('/auth/callback',
+app.get(
+  '/auth/callback',
   passport.authenticate('spotify', { failureRedirect: '/login' }),
-  function(req, res) {
+  (req, res) => {
     const expiresIn = 60 * 60 * 24 * 180; // 180 days
-    res.cookie('refresh_token', req.user.refresh_token,
-            {
-              maxAge: 1000 * expiresIn,
-              httpOnly: true
-            });
+    res.cookie('refresh_token', req.user.refresh_token, {
+      maxAge: 1000 * expiresIn
+    });
+    res.cookie('access_token', req.user.access_token, {
+      maxAge: 1000 * expiresIn
+    });
     createNewPlaylist(req.user.id, req.user.access_token, res);
-  }
+  },
 );
 
 //
