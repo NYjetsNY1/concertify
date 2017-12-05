@@ -76,7 +76,8 @@ class Pick extends React.Component {
         console.log(body.artist);
         for (let i = 0; i < body.artist.length; i++) {
           if (
-            body.artist[i].name.toLowerCase() === artistActualName.trim().toLowerCase() &&
+            body.artist[i].name.toLowerCase() ===
+              artistActualName.trim().toLowerCase() &&
             body.artist[i].tmid != undefined
           ) {
             console.log('got artist!');
@@ -186,41 +187,41 @@ class Pick extends React.Component {
           <h1 className={s.bannerTitle}>Artist: {this.state.artistName}</h1>
         </div>
 
-          <div className={s.formOne}>
-            <form method="post">
-              <div className={s.formGroup}>
-                <h2>Select Tours</h2>
-                <div className={s.selectContainer}> {tourInputs} </div>
-              </div>
-            </form>
-          </div>
-          <div className={s.formTwo}>
-            <form method="post">
-              <div className={s.formGroup}>
-                <h2>Select Dates</h2>
-                <div className={s.selectContainer}> {tourInputs} </div>
-              </div>
-            </form>
-          </div>
-          <div className={s.formThree}>
-            <form method="post">
-              <div className={s.formGroup}>
-                <h2>Select Venues</h2>
-                <div className={s.selectContainer}>{venueInputs}</div>
-              </div>
-            </form>
-          </div>
-          <div className={s.submitButtonWrapper}>
-            <a href="show">
-              <button
-                className={s.button}
-                onClick={this.getSongSelection}
-                type="submit"
-              >
-                Get Playlist
-              </button>
-            </a>
-          </div>
+        <div className={s.formOne}>
+          <form method="post">
+            <div className={s.formGroup}>
+              <h2>Select Tours</h2>
+              <div className={s.selectContainer}> {tourInputs} </div>
+            </div>
+          </form>
+        </div>
+        <div className={s.formTwo}>
+          <form method="post">
+            <div className={s.formGroup}>
+              <h2>Select Dates</h2>
+              <div className={s.selectContainer}> {tourInputs} </div>
+            </div>
+          </form>
+        </div>
+        <div className={s.formThree}>
+          <form method="post">
+            <div className={s.formGroup}>
+              <h2>Select Venues</h2>
+              <div className={s.selectContainer}>{venueInputs}</div>
+            </div>
+          </form>
+        </div>
+        <div className={s.submitButtonWrapper}>
+          <a href="show">
+            <button
+              className={s.button}
+              onClick={this.getSongSelection}
+              type="submit"
+            >
+              Get Playlist
+            </button>
+          </a>
+        </div>
       </div>
     );
   }
