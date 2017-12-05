@@ -30,6 +30,7 @@ import schema from './data/schema';
 import assets from './assets.json'; // eslint-disable-line import/no-unresolved
 import config from './config';
 import request from 'request';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 const app = express();
 
@@ -212,7 +213,9 @@ app.get('*', async (req, res, next) => {
 
     const data = { ...route };
     data.children = ReactDOM.renderToString(
-      <App context={context}>{route.component}</App>,
+      <MuiThemeProvider>
+        <App context={context}>{route.component}</App>
+        </MuiThemeProvider>,
     );
     data.styles = [{ id: 'css', cssText: [...css].join('') }];
     data.scripts = [assets.vendor.js];

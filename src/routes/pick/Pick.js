@@ -13,6 +13,8 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Pick.css';
 import { findDOMNode } from 'react-dom';
 import moment from 'moment';
+import DatePicker from 'material-ui/DatePicker';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 const Venue = ({ venue }) => (
   <label htmlFor="usernameOrEmail" className={s.tour_checkbox}>
@@ -41,7 +43,7 @@ class Pick extends React.Component {
       setListObject: {},
       tours: [],
       venues: [],
-      startDate: moment(),
+      controlledDate: null,
     };
     this.getVenues = this.getVenues.bind(this);
     this.getSongSelection = this.getSongSelection.bind(this);
@@ -168,9 +170,9 @@ class Pick extends React.Component {
     sessionStorage.setItem('selectedSongs', JSON.stringify(my_songs));
   }
 
-  handleChange(date) {
+  handleChange = (event, date) => {
     this.setState({
-      startDate: date,
+      controlledDate: date,
     });
   }
 
@@ -186,7 +188,6 @@ class Pick extends React.Component {
         <div className={s.container}>
           <h1 className={s.bannerTitle}>Artist: {this.state.artistName}</h1>
         </div>
-
         <div className={s.formOne}>
           <form method="post">
             <div className={s.formGroup}>
@@ -199,7 +200,22 @@ class Pick extends React.Component {
           <form method="post">
             <div className={s.formGroup}>
               <h2>Select Dates</h2>
-              <div className={s.selectContainer}> {tourInputs} </div>
+              <div className={s.selectContainer}>
+                <MuiThemeProvider>
+                  <DatePicker
+                    hintText="Start"
+                    value={this.state.controlledDate}
+                    onChange={this.handleChange}
+                  />
+                </MuiThemeProvider>
+                <MuiThemeProvider>
+                  <DatePicker
+                    hintText="End"
+                    value={this.state.controlledDate}
+                    onChange={this.handleChange}
+                  />
+                </MuiThemeProvider>
+              </div>
             </div>
           </form>
         </div>

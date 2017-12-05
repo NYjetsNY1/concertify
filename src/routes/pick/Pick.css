@@ -27,7 +27,7 @@ a {
 
 .container {
   margin: 0 auto;
-  padding: 0 0 10px;
+  margin-bottom: 30px;
   max-width: var(--max-content-width);
   border-bottom: solid 1px black;
 }
@@ -75,6 +75,7 @@ img {
   margin-left: 30px;
   display: inline-block;
   text-align: center;
+    border-right: solid 1px black;
 }
 
 .formTwo {
@@ -117,7 +118,7 @@ img {
   overflow-y: auto;
   height: 150px;
   text-align: left;
-  width: 60%;
+  width: 100%;
   margin-left: 20%;
 }
 
@@ -125,4 +126,7 @@ img {
   text-align: center;
   width: 100%;
 
+}
+
+input{
 }
