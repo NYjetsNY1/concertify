@@ -101,10 +101,10 @@ app.get('/auth',
   }),
   function(req, res) {});
 
-function addSongsToPlaylist(bearer_token, options, playlist_id, res) {
+function addSongsToPlaylist(bearer_token, options, user_id, playlist_id, res) {
   let tracks = 'spotify:track:77NNZQSqzLNqh2A9JhLRkg,' +
                'spotify:track:7tFiyTwD0nx5a1eklYtX2J';
-  let url = 'https://api.spotify.com/v1/users/blue_lu/playlists/' +
+  let url = 'https://api.spotify.com/v1/users/' + user_id + '/playlists/' +
             playlist_id + '/tracks?uris=' + tracks;
   options.url = 'https://cors-anywhere.herokuapp.com/' + url;
   options.headers.origin = url;
@@ -139,7 +139,7 @@ function createNewPlaylist(user_id, access_token, res) {
   };
   function callback(error, response, body) {
     if (!error && response.statusCode == 200 || response.statusCode == 201) {
-      addSongsToPlaylist(bearer_token, options, response.body.id, res);
+      addSongsToPlaylist(bearer_token, options, user_id, response.body.id, res);
     }
   }
   request(options, callback);
