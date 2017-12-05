@@ -13,21 +13,89 @@ import s from './Show.css';
 
 const Song = ({ song }) => <p> {song} </p>;
 
+function readCookie(name) {
+  const nameEQ = `${name}=`;
+  const ca = document.cookie.split(';');
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+  }
+  return null;
+}
+
 class Show extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       songs: [],
+      artist: '',
     };
+    this.getSongUri = this.getSongUri.bind(this);
   }
 
   componentDidMount() {
     let data = sessionStorage.getItem('selectedSongs');
+    this.state.artist = readCookie('artistName');
+    this.setState(this.state);
     data = JSON.parse(data);
+    //data is ['song name 1', 'song name 2', etc]
     console.log(data);
     const songs = data.map(d => d.name);
     console.log(songs);
     this.setState({ songs });
+  }
+
+  //artist is string 'artist'
+  //songs is array of song names
+  getSongUri(artist, tracks) {
+    artist = artist.trim();
+    let artistQuery = artist.replace(/ /g, '+');
+    let completeQueryCount = 0;
+    let unavailableTracks = [];
+    let availableTracks = [];
+    let accessToken = readCookie('access_token');
+
+    tracks.forEach(trackName => {
+      trackName = trackName.trim();
+      let trackQuery = trackName.replace(/ /g, '+');
+      fetch(
+        `https://api.spotify.com/v1/search?q=artist:${artistQuery}%20track:${trackQuery}&type=track`,
+        {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      ).then(response => {
+        response.json().then(data => {
+          completeQueryCount++;
+          const tracks = data.tracks;
+          if (tracks.items.length === 0) {
+            // song is not on spotify
+            unavailableTracks.push({
+              artist: artist,
+              track: trackName
+            });
+          } else {
+            // song is there
+            availableTracks.push({
+              artist: data.tracks.items[0].artists[0].name,
+              track: data.tracks.items[0].name,
+              spotifyUri: data.tracks.items[0].uri,
+            });
+          }
+          console.log(data);
+          if(completeQueryCount === tracks.length){
+            //after all calls have beend one
+            console.log(availableTracks);
+            console.log(unavailableTracks);
+            return availableTracks;
+          }
+        });
+      });
+    });
   }
 
   render() {
@@ -37,7 +105,7 @@ class Show extends React.Component {
     return (
       <div className={s.banner}>
         <div className={s.container}>
-          <h1 className={s.bannerTitle}>Artist: Lorde</h1>
+          <h1 className={s.bannerTitle}>Artist: {this.state.artist}</h1>
         </div>
         <div className={s.formLeft}>
           <div className={s.formOne}>
