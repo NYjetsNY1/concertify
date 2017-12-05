@@ -153,13 +153,13 @@ app.get(
   (req, res) => {
     const expiresIn = 60 * 60 * 24 * 180; // 180 days
     res.cookie('refresh_token', req.user.refresh_token, {
-      maxAge: 1000 * expiresIn
+      maxAge: 1000 * expiresIn,
     });
     res.cookie('access_token', req.user.access_token, {
-      maxAge: 1000 * expiresIn
+      maxAge: 1000 * expiresIn,
     });
-    //createNewPlaylist(req.user.id, req.user.access_token, res);
-    res.redirect('/home')
+    // createNewPlaylist(req.user.id, req.user.access_token, res);
+    res.redirect('/home');
   },
 );
 

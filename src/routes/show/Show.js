@@ -11,28 +11,29 @@ import React from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Show.css';
 
-const Song = ({ song }) => { return <p> { song } </p> };
+const Song = ({ song }) => <p> {song} </p>;
 
 class Show extends React.Component {
   constructor(props) {
-        super(props);
-        this.state = {
-            songs: [],
-        }
-    }
+    super(props);
+    this.state = {
+      songs: [],
+    };
+  }
 
-  componentDidMount(){
+  componentDidMount() {
     let data = sessionStorage.getItem('selectedSongs');
     data = JSON.parse(data);
     console.log(data);
-    let songs = data.map(d => d.name);
-    console.log(songs)
-    this.setState({songs: songs})
-
+    const songs = data.map(d => d.name);
+    console.log(songs);
+    this.setState({ songs });
   }
 
   render() {
-    let songInputs = this.state.songs.map((song, index) => (<Song key={index} song={song}/>));
+    const songInputs = this.state.songs.map((song, index) => (
+      <Song key={index} song={song} />
+    ));
     return (
       <div className={s.banner}>
         <div className={s.container}>
@@ -43,9 +44,7 @@ class Show extends React.Component {
             <form method="post">
               <div className={s.formGroup}>
                 <h2>All Songs Found:</h2>
-                <div className={s.songContainer}>
-                  {songInputs}
-                </div>
+                <div className={s.songContainer}>{songInputs}</div>
               </div>
             </form>
           </div>

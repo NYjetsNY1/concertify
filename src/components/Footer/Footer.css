@@ -12,10 +12,10 @@
 .root {
   background: black;
   color: #fff;
-  bottom: 0px;
-  margin-bottom: 0px;
-  padding-bottom: 0px;
-  bottom: 0px;
+  bottom: 0;
+  margin-bottom: 0;
+  padding-bottom: 0;
+  bottom: 0;
   width: 100%;
   position: fixed;
 }
