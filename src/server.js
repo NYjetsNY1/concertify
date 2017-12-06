@@ -105,13 +105,14 @@ app.get(
 );
 
 function addSongsToPlaylist(bearer_token, options, user_id, playlist_id, res) {
-  const tracks =
-    'spotify:track:77NNZQSqzLNqh2A9JhLRkg,' +
-    'spotify:track:7tFiyTwD0nx5a1eklYtX2J';
-  const url = `https://api.spotify.com/v1/users/${user_id}/playlists/${playlist_id}/tracks?uris=${tracks}`;
+  const url = `https://api.spotify.com/v1/users/${user_id}/playlists/${playlist_id}/tracks`
   options.url = `https://cors-anywhere.herokuapp.com/${url}`;
   options.headers.origin = url;
-  delete options.json;
+  options.json = {
+    uris: ['spotify:track:77NNZQSqzLNqh2A9JhLRkg',
+           'spotify:track:7tFiyTwD0nx5a1eklYtX2J',
+           'spotify:track:7BKLCZ1jbUBVqRi2FVlTVw']
+  };
   function callback(error, response, body) {
     if ((!error && response.statusCode == 200) || response.statusCode == 201) {
       res.json('The playlist was created.');
