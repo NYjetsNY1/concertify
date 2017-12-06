@@ -21,7 +21,7 @@ body{
   background-image: linear-gradient(#c074b2,#8ab5e8);
   height: 615px;
   margin: 0;
-  color: white
+  color: white;
 }
 
 a {
@@ -34,7 +34,7 @@ a {
   margin: 0 auto;
   margin-bottom: 30px;
   max-width: var(--max-content-width);
-  border-bottom: solid 1px white;
+
 }
 
 pre {
@@ -57,7 +57,7 @@ img {
   padding: 0;
   padding-bottom: 10px;
   font-weight: normal;
-  font-size: 4em;
+  font-size: 4.5em;
   line-height: 1em;
 }
 
@@ -107,5 +107,5 @@ img {
   height: 250px;
   border-bottom: solid 1px white;
   border-top: solid 1px white;
-  font-size: 25px
+  font-size: 25px;
 }

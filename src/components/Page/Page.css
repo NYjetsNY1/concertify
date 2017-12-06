@@ -14,6 +14,12 @@
   padding-right: 20px;
 }
 
+body{
+  background-image: linear-gradient(#c074b2,#8ab5e8);
+  height: 600px;
+  margin: 0;
+}
+
 .container {
   margin: 0 auto;
   padding: 0 0 40px;

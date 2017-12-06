@@ -74,13 +74,13 @@ class Pick extends React.Component {
       selectedTours: [],
       selectedVenues: [],
     };
-    this.getVenues              = this.getVenues.bind(this);
-    this.getSongSelection       = this.getSongSelection.bind(this);
-    this.handleStartChange      = this.handleStartChange.bind(this);
-    this.handleEndChange        = this.handleEndChange.bind(this);
-    this.onVenueClick           = this.onVenueClick.bind(this);
-    this.onTourClick            = this.onTourClick.bind(this);
-    this.filterIncludesSetList  = this.filterIncludesSetList.bind(this);
+    this.getVenues = this.getVenues.bind(this);
+    this.getSongSelection = this.getSongSelection.bind(this);
+    this.handleStartChange = this.handleStartChange.bind(this);
+    this.handleEndChange = this.handleEndChange.bind(this);
+    this.onVenueClick = this.onVenueClick.bind(this);
+    this.onTourClick = this.onTourClick.bind(this);
+    this.filterIncludesSetList = this.filterIncludesSetList.bind(this);
   }
 
   // if we want to make our own proxy
@@ -240,13 +240,13 @@ class Pick extends React.Component {
     sessionStorage.setItem('selectedSongs', JSON.stringify(song_de_duper));
   }
 
-  filterIncludesSetList(tour, venue){
+  filterIncludesSetList(tour, venue) {
     return (
       (tour != undefined &&
         this.state.selectedTours.includes(tour.name.toLowerCase())) ||
       (venue != undefined &&
         this.state.selectedVenues.includes(venue.name.toLowerCase()))
-      )
+    );
   }
 
   handleStartChange = (event, date) => {
@@ -283,7 +283,7 @@ class Pick extends React.Component {
               <div className={s.formGroup}>
                 <h2>Select Dates</h2>
                 <div className={s.selectContainer}>
-                  <div className={s.intraDateDiv}></div>
+                  <div className={s.intraDateDiv} />
                   <MuiThemeProvider>
                     <DatePicker
                       hintText="Start"
@@ -291,7 +291,7 @@ class Pick extends React.Component {
                       onChange={this.handleStartChange}
                     />
                   </MuiThemeProvider>
-                  <div className={s.intraDateDiv}></div>
+                  <div className={s.intraDateDiv} />
                   <MuiThemeProvider>
                     <DatePicker
                       hintText="End"

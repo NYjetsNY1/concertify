@@ -7,11 +7,13 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 @import '../../components/variables.css';
+
 body{
   background-image: linear-gradient(#c074b2,#8ab5e8);
   height: 600px;
   color: white;
 }
+
 .root {
   padding-left: 20px;
   padding-right: 20px;
@@ -19,10 +21,31 @@ body{
 
 .container {
   margin: 0 auto;
-  padding: 0 0 40px;
-  max-width: 480px;
+  padding-top: 150px;
+  padding-bottom: 250px;
+  width: 49%;
+  height: 100%;
   text-align: center;
-  margin-top: 100px;
+  display: inline-block;
+}
+
+.container:hover{
+  opacity: 0.5
+}
+
+.cont2:hover{
+  opacity: 0.5
+}
+
+.cont2{
+  margin: 0 auto;
+  padding-top: 200px;
+  padding-bottom: 200px;
+  width: 49.9%;
+  height: 100%;
+  text-align: center;
+  display: inline-block;
+  border-left: solid 1px white;
 }
 
 .lead {
@@ -170,4 +193,13 @@ body{
   width: 100%;
   border-bottom: 1px solid #ddd;
   content: '';
+}
+
+a{
+  text-decoration: none;
+  color: white;
+}
+
+h1 {
+  font-size: 45px;
 }

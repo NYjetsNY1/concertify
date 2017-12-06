@@ -21,12 +21,12 @@ body{
   background-image: linear-gradient(#c074b2,#8ab5e8);
   height: 615px;
   margin: 0;
-  color: white
+  color: white;
 }
 
 a {
   text-decoration: none;
-    font-size: 25px;
+  font-size: 25px;
 }
 
 .container {
@@ -79,7 +79,6 @@ img {
   margin-left: 30px;
   display: inline-block;
   text-align: center;
-
   margin-bottom: 40px;
 }
 
