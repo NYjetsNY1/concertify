@@ -14,11 +14,13 @@ import s from './Home.css';
 class Home extends React.Component {
   constructor(props) {
     super(props);
-    this.saveArtistName   = this.saveArtistName.bind(this);
-    this.onKeyPressed     = this.onKeyPressed.bind(this);
+    this.saveArtistName = this.saveArtistName.bind(this);
+    this.onKeyPressed = this.onKeyPressed.bind(this);
   }
 
-  componentDidMount(){ document.addEventListener("keydown", this.onKeyPressed) }
+  componentDidMount() {
+    document.addEventListener('keydown', this.onKeyPressed);
+  }
 
   saveArtistName() {
     const artistName = document.getElementById('artistName').value;
@@ -26,13 +28,13 @@ class Home extends React.Component {
     document.cookie = `artistName = ${artistName}`;
   }
 
-  onKeyPressed(e){
+  onKeyPressed(e) {
     console.log(e.code);
-      if(e.code == "Enter"){
-        this.saveArtistName()
-        window.history = ('/pick');
-      }
+    if (e.code == 'Enter') {
+      this.saveArtistName();
+      window.history = '/pick';
     }
+  }
 
   render() {
     return (
