@@ -17,19 +17,24 @@ html {
   line-height: 1.375; /* ~22px */
 }
 
-body {
+body{
+  background-image: linear-gradient(#c074b2,#8ab5e8);
+  height: 615px;
   margin: 0;
+  color: white
 }
 
 a {
   text-decoration: none;
+  font-size: 25px;
+  color: white;
 }
 
 .container {
   margin: 0 auto;
-  padding: 0 0 10px;
+  margin-bottom: 30px;
   max-width: var(--max-content-width);
-  border-bottom: solid 1px black;
+  border-bottom: solid 1px white;
 }
 
 pre {
@@ -50,8 +55,9 @@ img {
 .bannerTitle {
   margin: 0;
   padding: 0;
+  padding-bottom: 10px;
   font-weight: normal;
-  font-size: 3em;
+  font-size: 4em;
   line-height: 1em;
 }
 
@@ -62,7 +68,7 @@ img {
 }
 
 .formOne {
-  width: 45%;
+  width: 75%;
   margin-left: 30px;
   display: inline-block;
   text-align: center;
@@ -98,5 +104,8 @@ img {
 
 .songContainer {
   overflow-y: auto;
-  height: 200px;
+  height: 250px;
+  border-bottom: solid 1px white;
+  border-top: solid 1px white;
+  font-size: 25px
 }

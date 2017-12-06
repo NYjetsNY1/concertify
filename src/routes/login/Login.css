@@ -7,7 +7,11 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 @import '../../components/variables.css';
-
+body{
+  background-image: linear-gradient(#c074b2,#8ab5e8);
+  height: 600px;
+  color: white;
+}
 .root {
   padding-left: 20px;
   padding-right: 20px;

@@ -17,23 +17,22 @@ html {
   line-height: 1.375; /* ~22px */
 }
 
-body {
+body{
+  background-image: linear-gradient(#c074b2,#8ab5e8);
+  height: 615px;
   margin: 0;
-
-  /*height: 650px;*/
-
-  /*background-image: ;*/
+  color: white
 }
 
 a {
   text-decoration: none;
+    font-size: 25px;
 }
 
 .container {
   margin: 0 auto;
   margin-bottom: 30px;
   max-width: var(--max-content-width);
-  border-bottom: solid 1px black;
 }
 
 pre {
@@ -54,8 +53,9 @@ img {
 .bannerTitle {
   margin: 0;
   padding: 0;
+  padding-bottom: 10px;
   font-weight: normal;
-  font-size: 3em;
+  font-size: 4em;
   line-height: 1em;
 }
 
@@ -79,7 +79,7 @@ img {
   margin-left: 30px;
   display: inline-block;
   text-align: center;
-  border-right: solid 1px black;
+
   margin-bottom: 40px;
 }
 
@@ -87,7 +87,6 @@ img {
   width: 32%;
   display: inline-block;
   text-align: center;
-  border-right: solid 1px black;
   margin-bottom: 40px;
 }
 
@@ -123,8 +122,11 @@ img {
 .selectContainer {
   overflow-y: auto;
   height: 230px;
-  width: 100%;
+  width: 80%;
+  margin-left: 10%;
   margin-bottom: 10px;
+  border-bottom: solid 1px white;
+  border-top: solid 1px white;
 }
 
 .submitButtonWrapper {
@@ -134,4 +136,9 @@ img {
 }
 
 input{
+}
+
+.intraDateDiv{
+  padding-top: 35px;
+  width: 100%;
 }

@@ -21,6 +21,7 @@ const styles = {
   uploadButton: {
     verticalAlign: 'middle',
     width: '100%',
+    color: 'white',
   },
   uploadInput: {
     cursor: 'pointer',
@@ -185,13 +186,14 @@ class Pick extends React.Component {
   onVenueClick(ev) {
     const venueName = ev.target.innerText;
     if (!this.state.selectedVenues.includes(venueName.toLowerCase())) {
-      ev.target.parentElement.style.backgroundImage = `linear-gradient(white, red)`;
+      ev.target.parentElement.style.backgroundImage = `linear-gradient(#27f274, #27f274)`;
       const newSelectedVenues = [venueName.toLowerCase()].concat(
         this.state.selectedVenues,
       );
       this.setState({ selectedVenues: newSelectedVenues });
     } else {
       ev.target.parentElement.style.backgroundImage = `none`;
+      ev.target.style.backgroundImage = `none`;
       const newSelectedVenues = this.state.selectedVenues;
       const deslectItem = newSelectedVenues.indexOf(venueName);
       newSelectedVenues.splice(deslectItem, 1);
@@ -202,7 +204,7 @@ class Pick extends React.Component {
   onTourClick(ev) {
     const tourName = ev.target.innerText;
     if (!this.state.selectedTours.includes(tourName.toLowerCase())) {
-      ev.target.parentElement.style.backgroundImage = `linear-gradient(white, red)`;
+      ev.target.parentElement.style.backgroundImage = `linear-gradient(#27f274, #27f274)`;
       const newSelectedTours = [tourName.toLowerCase()].concat(
         this.state.selectedTours,
       );
@@ -281,6 +283,7 @@ class Pick extends React.Component {
               <div className={s.formGroup}>
                 <h2>Select Dates</h2>
                 <div className={s.selectContainer}>
+                  <div className={s.intraDateDiv}></div>
                   <MuiThemeProvider>
                     <DatePicker
                       hintText="Start"
@@ -288,6 +291,7 @@ class Pick extends React.Component {
                       onChange={this.handleStartChange}
                     />
                   </MuiThemeProvider>
+                  <div className={s.intraDateDiv}></div>
                   <MuiThemeProvider>
                     <DatePicker
                       hintText="End"
@@ -314,7 +318,7 @@ class Pick extends React.Component {
                 onClick={this.getSongSelection}
                 type="submit"
               >
-                Get Playlist
+                Get Setlists
               </button>
             </a>
           </div>

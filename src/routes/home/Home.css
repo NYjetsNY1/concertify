@@ -17,7 +17,9 @@ html {
   line-height: 1.375; /* ~22px */
 }
 
-body {
+body{
+  background-image: linear-gradient(#c074b2,#8ab5e8);
+  height: 500px;
   margin: 0;
 }
 
@@ -48,6 +50,7 @@ img {
 
 .bannerTitle {
   margin: 0;
+  color: white;
   padding: 10px;
   font-weight: normal;
   font-size: 4em;
