@@ -42,21 +42,21 @@ class Show extends React.Component {
     //data is ['song name 1', 'song name 2', etc]
     console.log(data);
     const songs = data.map(d => d.name);
-    console.log(songs);
-    this.setState({ songs });
+    let dedupedTracks = Array.from( new Set(songs) );
+    dedupedTracks = dedupedTracks.filter(e => String(e).trim());
+    console.log(dedupedTracks);
+    this.setState({ songs: dedupedTracks });
+    console.log(this.state);
   }
 
   //artist is string 'artist'
   //songs is array of song names
-  getSongUri(artist, tracks) {
-    console.log(sessionStorage.getItem('selectedSongs'))
-    tracks = JSON.parse(sessionStorage.getItem('selectedSongs'));
-    console.log(tracks)
-    let tracks1 = tracks.map(track => {return track.name});
-    tracks = tracks1;
+  getSongUri() {
+    console.log(this.state);
+    tracks = this.state.songs;
     artist = readCookie('artistName')
-    console.log(tracks)
-    console.log(artist)
+    console.log(tracks);
+    console.log(artist);
     artist = artist.trim();
     let artistQuery = artist.replace(/ /g, '+');
     let completeQueryCount = 0;
@@ -94,13 +94,11 @@ class Show extends React.Component {
               spotifyUri: data.tracks.items[0].uri,
             });
           }
-          console.log(data);
           if(completeQueryCount === tracks.length){
             //after all calls have beend one
             console.log(availableTracks);
             console.log(unavailableTracks);
 
-            console.log(availableTracks)
             let myHeaders = new Headers();
 
             let myInit = { method: 'POST',
