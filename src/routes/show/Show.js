@@ -49,6 +49,14 @@ class Show extends React.Component {
   //artist is string 'artist'
   //songs is array of song names
   getSongUri(artist, tracks) {
+    console.log(sessionStorage.getItem('selectedSongs'))
+    tracks = JSON.parse(sessionStorage.getItem('selectedSongs'));
+    console.log(tracks)
+    let tracks1 = tracks.map(track => {return track.name});
+    tracks = tracks1;
+    artist = readCookie('artistName')
+    console.log(tracks)
+    console.log(artist)
     artist = artist.trim();
     let artistQuery = artist.replace(/ /g, '+');
     let completeQueryCount = 0;
@@ -71,8 +79,8 @@ class Show extends React.Component {
       ).then(response => {
         response.json().then(data => {
           completeQueryCount++;
-          const tracks = data.tracks;
-          if (tracks.items.length === 0) {
+          const res_tracks = data.tracks;
+          if (res_tracks.items.length === 0) {
             // song is not on spotify
             unavailableTracks.push({
               artist: artist,
@@ -91,6 +99,19 @@ class Show extends React.Component {
             //after all calls have beend one
             console.log(availableTracks);
             console.log(unavailableTracks);
+
+            console.log(availableTracks)
+            let myHeaders = new Headers();
+
+            let myInit = { method: 'POST',
+                          headers: myHeaders,
+                          body:    availableTracks
+                          };
+
+            fetch('v1/setsToSpotify', myInit)
+              .then(function(response) {  console.log(response) })
+
+
             return availableTracks;
           }
         });
@@ -139,9 +160,9 @@ class Show extends React.Component {
             </form>
           </div>
         </div>
-        <div className={s.submitBtn}>
-          <button className={s.button} type="submit">
-            <a href="/auth">Create Spotify Playlist</a>
+        <div >
+          <button className={s.button} onClick={this.getSongUri}>
+            Create Spotify Playlist
           </button>
         </div>
       </div>

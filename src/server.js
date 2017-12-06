@@ -165,6 +165,12 @@ app.get(
   },
 );
 
+app.post( '/v1/setsToSpotify', (req, res) => {
+    console.log(req.body);
+    res.status(200).send({body: req.body})
+  }
+)
+
 //
 // Register API middleware
 // -----------------------------------------------------------------------------
