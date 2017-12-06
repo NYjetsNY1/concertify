@@ -14,25 +14,37 @@ import s from './Pick.css';
 import { findDOMNode } from 'react-dom';
 import moment from 'moment';
 import DatePicker from 'material-ui/DatePicker';
+import FlatButton from 'material-ui/FlatButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-const Venue = ({ venue }) => (
-  <label htmlFor="usernameOrEmail" className={s.tour_checkbox}>
-    <input id={venue} type="checkbox" value={venue} name={venue} /> {venue}{' '}
-    <br />
-  </label>
+
+const styles = {
+  uploadButton: {
+    verticalAlign: 'middle',
+    width: '100%'
+  },
+  uploadInput: {
+    cursor: 'pointer',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+    width: '100%',
+    opacity: 0,
+  },
+};
+
+const Venue = ({ key, venue, onClick }) => (
+  <div>
+    <FlatButton id={venue} onClick = {onClick} label={venue} labelPosition="before" style={styles.uploadButton} containerElement="label"></FlatButton>
+  </div>
 );
 
-const Tour = ({ tour }) => (
-  <label htmlFor="usernameOrEmail" className={s.tour_checkbox}>
-    <input
-      id="usernameOrEmail"
-      type="checkbox"
-      value="TourA"
-      name="usernameOrEmail"
-    />{' '}
-    {tour} <br />
-  </label>
+const Tour = ({ key, tour, onClick }) => (
+  <div>
+    <FlatButton id={tour} onClick = {onClick} label={tour} labelPosition="before" style={styles.uploadButton} containerElement="label"></FlatButton>
+  </div>
 );
 
 class Pick extends React.Component {
@@ -43,11 +55,17 @@ class Pick extends React.Component {
       setListObject: {},
       tours: [],
       venues: [],
-      controlledDate: null,
+      controlledStartDate: null,
+      controlledEndDate: null,
+      selectedTours: [],
+      selectedVenues: []
     };
-    this.getVenues = this.getVenues.bind(this);
-    this.getSongSelection = this.getSongSelection.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+    this.getVenues          = this.getVenues.bind(this);
+    this.getSongSelection   = this.getSongSelection.bind(this);
+    this.handleStartChange  = this.handleStartChange.bind(this);
+    this.handleEndChange    = this.handleEndChange.bind(this);
+    this.onVenueClick       = this.onVenueClick.bind(this);
+    this.onTourClick        = this.onTourClick.bind(this);
   }
 
   // if we want to make our own proxy
@@ -137,11 +155,17 @@ class Pick extends React.Component {
   }
 
   getVenues(setlist) {
-    return setlist.map(concert => concert.venue.name);
+    let venues = new Set();
+    setlist.forEach(concert => {
+      if ( concert.venue.name != undefined ) {
+        venues.add(concert.venue.name);
+      }
+    })
+    return [...venues];
   }
 
   getTours(setlist) {
-    const tours = new Set();
+    let tours = new Set();
     setlist.forEach(concert => {
       if (
         concert.tour != undefined &&
@@ -154,37 +178,86 @@ class Pick extends React.Component {
     return [...tours];
   }
 
+  onVenueClick(ev){
+    let venueName = ev.target.innerText;
+    console.log(ev.target.innerText);
+    if(!this.state.selectedVenues.includes(venueName.toLowerCase())){
+      ev.target.parentElement.style.backgroundImage = `linear-gradient(white, red)`;
+      let newSelectedVenues = [venueName.toLowerCase()].concat(this.state.selectedVenues);
+      this.setState({selectedVenues: newSelectedVenues})
+    }else{
+      ev.target.parentElement.style.backgroundImage = `none`;
+      let newSelectedVenues = this.state.selectedVenues;
+      let deslectItem = newSelectedVenues.indexOf(venueName);
+      newSelectedVenues.splice(deslectItem, 1);
+      this.setState({selectedVenues: newSelectedVenues})
+    }
+    console.log(this.state.selectedVenues)
+    console.log(ev.target.style.backgroundImage)
+  }
+
+  onTourClick(ev){
+    let tourName = ev.target.innerText;
+    console.log(ev.target.innerText);
+    if(!this.state.selectedTours.includes(tourName.toLowerCase())){
+      ev.target.parentElement.style.backgroundImage = `linear-gradient(white, red)`;
+      let newSelectedTours = [tourName.toLowerCase()].concat(this.state.selectedTours);
+      this.setState({selectedTours: newSelectedTours})
+    }else{
+      ev.target.parentElement.style.backgroundImage = `none`;
+      ev.target.style.backgroundImage = `none`;
+      let newSelectedTours = this.state.selectedTours;
+      let deslectItem = newSelectedTours.indexOf(tourName);
+      newSelectedTours.splice(deslectItem, 1);
+      this.setState({ selectedTours: newSelectedTours })
+    }
+    console.log(this.state.selectedTours)
+    console.log(ev.target.style.backgroundImage)
+  }
+
   getSongSelection() {
-    console.log(this.state.setListObject.setlist);
     const my_setlist = this.state.setListObject.setlist;
     let my_songs = [];
     my_setlist.forEach(setlist => {
-      console.log(setlist.sets.set[0]);
-      my_songs = my_songs.concat(setlist.sets.set[0].song);
-      if (setlist.sets.set.length > 1) {
-        my_songs = my_songs.concat(setlist.sets.set[1].song);
+      console.log(this.state.selectedVenues.includes(setlist.venue.name))
+      console.log(this.state.selectedVenues)
+      console.log(setlist.venue.name)
+      if(setlist.tour != undefined && this.state.selectedTours.includes(setlist.tour.name.toLowerCase()) ||
+        setlist.venue != undefined && this.state.selectedVenues.includes(setlist.venue.name.toLowerCase())){
+          console.log(setlist.sets.set[0]);
+          my_songs = my_songs.concat(setlist.sets.set[0].song);
+          if (setlist.sets.set.length > 1) {
+            my_songs = my_songs.concat(setlist.sets.set[1].song);
+          }
+        }
+    });
+    console.log(my_songs)
+    let song_de_duper = new Set();
+    my_songs.forEach(song => {
+      if(!song_de_duper.has(song)){
+        song_de_duper.add(song)
       }
     });
-    console.log(my_songs);
-    document.cookie = `selectedSongs = ${my_songs}`;
-    sessionStorage.setItem('selectedSongs', JSON.stringify(my_songs));
+    song_de_duper = [...song_de_duper]
+    sessionStorage.setItem('selectedSongs', JSON.stringify(song_de_duper));
+    console.log(this.state)
+    console.log(song_de_duper)
   }
 
-  handleChange = (event, date) => {
-    this.setState({
-      controlledDate: date,
-    });
-  }
+  handleStartChange = (event, date) => { this.setState({ controlledStartDate: date }) };
+
+  handleEndChange = (event, date) => { this.setState({ controlledEndDate: date }) };
 
   render() {
     const venueInputs = this.state.venues.map((venue, index) => (
-      <Venue key={index} venue={venue} />
+      <Venue key={index} venue={venue} onClick={this.onVenueClick}/>
     ));
     const tourInputs = this.state.tours.map((tour, index) => (
-      <Tour key={index} tour={tour} />
+      <Tour key={index} tour={tour}  onClick={this.onTourClick}/>
     ));
     return (
       <div className={s.banner}>
+        <MuiThemeProvider>
         <div className={s.container}>
           <h1 className={s.bannerTitle}>Artist: {this.state.artistName}</h1>
         </div>
@@ -204,15 +277,15 @@ class Pick extends React.Component {
                 <MuiThemeProvider>
                   <DatePicker
                     hintText="Start"
-                    value={this.state.controlledDate}
-                    onChange={this.handleChange}
+                    value={this.state.controlledStartDate}
+                    onChange={this.handleStartChange}
                   />
                 </MuiThemeProvider>
                 <MuiThemeProvider>
                   <DatePicker
                     hintText="End"
-                    value={this.state.controlledDate}
-                    onChange={this.handleChange}
+                    value={this.state.controlledEndDate}
+                    onChange={this.handleEndChange}
                   />
                 </MuiThemeProvider>
               </div>
@@ -238,6 +311,7 @@ class Pick extends React.Component {
             </button>
           </a>
         </div>
+      </MuiThemeProvider>
       </div>
     );
   }

@@ -215,7 +215,7 @@ app.get('*', async (req, res, next) => {
     data.children = ReactDOM.renderToString(
       <MuiThemeProvider>
         <App context={context}>{route.component}</App>
-        </MuiThemeProvider>,
+      </MuiThemeProvider>,
     );
     data.styles = [{ id: 'css', cssText: [...css].join('') }];
     data.scripts = [assets.vendor.js];
