@@ -105,13 +105,15 @@ app.get(
 );
 
 function addSongsToPlaylist(bearer_token, options, user_id, playlist_id, res) {
-  const url = `https://api.spotify.com/v1/users/${user_id}/playlists/${playlist_id}/tracks`
+  const url = `https://api.spotify.com/v1/users/${user_id}/playlists/${playlist_id}/tracks`;
   options.url = `https://cors-anywhere.herokuapp.com/${url}`;
   options.headers.origin = url;
   options.json = {
-    uris: ['spotify:track:77NNZQSqzLNqh2A9JhLRkg',
-           'spotify:track:7tFiyTwD0nx5a1eklYtX2J',
-           'spotify:track:7BKLCZ1jbUBVqRi2FVlTVw']
+    uris: [
+      'spotify:track:77NNZQSqzLNqh2A9JhLRkg',
+      'spotify:track:7tFiyTwD0nx5a1eklYtX2J',
+      'spotify:track:7BKLCZ1jbUBVqRi2FVlTVw',
+    ],
   };
   function callback(error, response, body) {
     if ((!error && response.statusCode == 200) || response.statusCode == 201) {
@@ -165,11 +167,11 @@ app.get(
   },
 );
 
-app.post( '/v1/setsToSpotify', (req, res) => {
-    console.log(req.body);
-    res.status(200).send({body: req.body})
-  }
-)
+app.post('/v1/setsToSpotify', (req, res) => {
+  console.log((req));
+  console.log((req.body));
+  res.status(200).send({ body: req.body });
+});
 
 //
 // Register API middleware

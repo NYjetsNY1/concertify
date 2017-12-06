@@ -36,8 +36,7 @@ class Show extends React.Component {
 
   componentDidMount() {
     let data = sessionStorage.getItem('selectedSongs');
-    this.state.artist = readCookie('artistName');
-    this.setState(this.state);
+    this.setState({artist: readCookie('artistName')})
     data = JSON.parse(data);
     //data is ['song name 1', 'song name 2', etc]
     console.log(data);
@@ -53,8 +52,8 @@ class Show extends React.Component {
   //songs is array of song names
   getSongUri() {
     console.log(this.state);
-    tracks = this.state.songs;
-    artist = readCookie('artistName')
+    let tracks = this.state.songs;
+    let artist = readCookie('artistName')
     console.log(tracks);
     console.log(artist);
     artist = artist.trim();
@@ -98,12 +97,16 @@ class Show extends React.Component {
             //after all calls have beend one
             console.log(availableTracks);
             console.log(unavailableTracks);
-
-            let myHeaders = new Headers();
+            let sendingTracks = JSON.stringify({availableTracks})
+            console.log(sendingTracks)
+            let headers= new Headers({
+                                'Content-Type': 'application/json',
+                                Accept: 'application/json',
+                              })
 
             let myInit = { method: 'POST',
-                          headers: myHeaders,
-                          body:    availableTracks
+                          headers: headers,
+                          body:    JSON.stringify({availableTracks})
                           };
 
             fetch('v1/setsToSpotify', myInit)
