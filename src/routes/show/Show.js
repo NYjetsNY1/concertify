@@ -40,12 +40,15 @@ class Show extends React.Component {
   componentDidMount() {
     let data = sessionStorage.getItem('selectedSongs');
     data = JSON.parse(data);
-    const songs = data.map(d => d.name);
-    let tracks = new Set(songs);
-    tracks = Array.from(tracks);
+    let songs = []
+    if(data != null){
+      songs = data.map(d => d.name);
+      songs = new Set(songs);
+      songs = Array.from(songs);
+    }
     this.setState({
       artist: readCookie('artistName'),
-      songs: tracks,
+      songs: songs,
     });
     this.getSongUri();
   }
@@ -55,7 +58,10 @@ class Show extends React.Component {
   getSongUri() {
     let data = sessionStorage.getItem('selectedSongs');
     data = JSON.parse(data);
-    const songs = data.map(d => d.name);
+    let songs = [];
+    if(data != null){
+      songs = data.map(d => d.name);
+    }
     let tracks = new Set(songs);
     console.log(tracks);
     tracks = Array.from(tracks);
@@ -132,7 +138,10 @@ class Show extends React.Component {
 
     fetch('v1/setsToSpotify', myInit)
       .then(response => {
-        response.json().then(data => {console.log(data)})
+        response.json().then(data => {
+                                      console.log(data)
+                                      location.href = 'https://open.spotify.com/collection/playlists';
+                                    })
       });
     console.log(this.state.spotifyURIs)
   }
