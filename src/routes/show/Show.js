@@ -163,7 +163,7 @@ class Show extends React.Component {
             <form method="post">
               <div className={s.formGroup}>
                 <h2>Songs On Spotify</h2>
-                <div className={s.songContainer}>{songInputs}</div>
+                <div className={s.songContainer}>{spotifyInputs}</div>
               </div>
             </form>
           </div>
