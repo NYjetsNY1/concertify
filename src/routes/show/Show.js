@@ -30,39 +30,38 @@ class Show extends React.Component {
     this.state = {
       songs: [],
       artist: '',
+      spotifyTracks: [],
+      spotifyURIs: []
     };
     this.getSongUri = this.getSongUri.bind(this);
   }
 
   componentDidMount() {
     let data = sessionStorage.getItem('selectedSongs');
-    this.setState({artist: readCookie('artistName')})
     data = JSON.parse(data);
-    //data is ['song name 1', 'song name 2', etc]
-    console.log(data);
     const songs = data.map(d => d.name);
-    let dedupedTracks = Array.from( new Set(songs) );
-    dedupedTracks = dedupedTracks.filter(e => String(e).trim());
-    console.log(dedupedTracks);
-    this.setState({ songs: dedupedTracks });
-    console.log(this.state);
+    console.log(songs);
+    this.setState({
+      artist: readCookie('artistName'),
+      songs: songs
+    });
+    this.getSongUri();
   }
 
   //artist is string 'artist'
   //songs is array of song names
   getSongUri() {
-    console.log(this.state);
-    let tracks = this.state.songs;
+    let data = sessionStorage.getItem('selectedSongs');
+    data = JSON.parse(data);
+    const songs = data.map(d => d.name);
+    let tracks = songs;
     let artist = readCookie('artistName')
-    console.log(tracks);
-    console.log(artist);
     artist = artist.trim();
     let artistQuery = artist.replace(/ /g, '+');
     let completeQueryCount = 0;
     let unavailableTracks = [];
     let availableTracks = [];
     let accessToken = readCookie('access_token');
-
     tracks.forEach(trackName => {
       trackName = trackName.trim();
       let trackQuery = trackName.replace(/ /g, '+');
@@ -95,10 +94,13 @@ class Show extends React.Component {
           }
           if(completeQueryCount === tracks.length){
             //after all calls have beend one
-            console.log(availableTracks);
-            console.log(unavailableTracks);
-            let sendingTracks = JSON.stringify({availableTracks})
-            console.log(sendingTracks)
+            let availableTrackURIs = availableTracks.map(track => { return track.spotifyUri });
+            let availableTrackNames = availableTracks.map(track => { return track.track });
+            this.setState({
+              spotifyTracks: availableTrackNames,
+              spotifyURIs:   availableTrackURIs
+            })
+            let sendingTracks = JSON.stringify({availableTracks});
             let headers= new Headers({
                                 'Content-Type': 'application/json',
                                 Accept: 'application/json',
@@ -106,13 +108,11 @@ class Show extends React.Component {
 
             let myInit = { method: 'POST',
                           headers: headers,
-                          body:    JSON.stringify({availableTracks})
+                          body:    JSON.stringify({availableTrackURIs})
                           };
 
             fetch('v1/setsToSpotify', myInit)
               .then(function(response) {  console.log(response) })
-
-
             return availableTracks;
           }
         });
@@ -121,7 +121,11 @@ class Show extends React.Component {
   }
 
   render() {
-    const songInputs = this.state.songs.map((song, index) => (
+    let songInputs = this.state.songs.map((song, index) => (
+      <Song key={index} song={song} />
+    ));
+
+    let spotifyInputs = this.state.spotifyTracks.map((song, index) => (
       <Song key={index} song={song} />
     ));
     return (
@@ -144,19 +148,7 @@ class Show extends React.Component {
             <form method="post">
               <div className={s.formGroup}>
                 <h2>Songs On Spotify</h2>
-                <div className={s.songContainer}>
-                  <p>Song 1</p>
-                  <p>Song 2</p>
-                  <p>Song 5</p>
-                  <p>Song 6</p>
-                  <p>Song 8</p>
-                  <p>Song 9</p>
-                  <p>Song 11</p>
-                  <p>Song 11</p>
-                  <p>Song 11</p>
-                  <p>Song 11</p>
-                  <p>Song 11</p>
-                </div>
+                  <div className={s.songContainer}>{songInputs}</div>
               </div>
             </form>
           </div>

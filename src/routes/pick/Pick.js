@@ -230,13 +230,9 @@ class Pick extends React.Component {
         }
       }
     });
-    let song_de_duper = new Set();
-    my_songs.forEach(song => {
-      if (!song_de_duper.has(song)) {
-        song_de_duper.add(song);
-      }
-    });
-    song_de_duper = [...song_de_duper];
+    let song_de_duper = new Set(my_songs);
+    song_de_duper = Array.from(song_de_duper);
+    sessionStorage.removeItem('selectedSongs');
     sessionStorage.setItem('selectedSongs', JSON.stringify(song_de_duper));
   }
 
