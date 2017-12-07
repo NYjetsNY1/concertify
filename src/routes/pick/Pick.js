@@ -204,11 +204,11 @@ class Pick extends React.Component {
 
   onVenueClick(ev) {
     const venueName = ev.target.innerText;
-    if (!this.state.selectedVenues.includes(venueName.toLowerCase())) {
+    if (!this.state.selectedVenues.includes(venueName.toLowerCase().substr(0, venueName.indexOf("(")-1))) {
       ev.target.parentElement.style.backgroundImage = `linear-gradient(#27f274, #27f274)`;
-      const newSelectedVenues = [
-        venueName.toLowerCase().substr(0, venueName.indexOf('(') - 1),
-      ].concat(this.state.selectedVenues);
+      let newSelectedVenues = [venueName.toLowerCase().substr(0,venueName.indexOf('(') - 1)].concat(
+        this.state.selectedVenues,
+      );
       this.setState({ selectedVenues: newSelectedVenues });
     } else {
       ev.target.parentElement.style.backgroundImage = `none`;
