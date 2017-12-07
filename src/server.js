@@ -164,7 +164,7 @@ app.get(
       maxAge: 1000 * 60 * 60 * 24 * 180,
     });
     user = req.user;
-    res.redirect('/home');
+    res.redirect('https://cs4278-concertify.herokuapp.com/home');
   },
 );
 

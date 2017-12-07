@@ -64,19 +64,28 @@ class Show extends React.Component {
   getSongUri() {
     let data = sessionStorage.getItem('selectedSongs');
     data = JSON.parse(data);
-    let songs = [];
+    let tracks = [];
     if (data != null) {
-      songs = data.map(d => d.name);
-      songs = new Set(songs);
-      songs = Array.from(songs);
+      tracks = data.map(d => d.name);
+      tracks = new Set(tracks);
+      tracks = Array.from(tracks);
     }
-    let tracks = songs;
     console.log(tracks);
-    tracks = Array.from(tracks);
-    console.log(tracks);
-    let artist = readCookie('artistName');
-    artist = artist.trim();
-    let artistQuery = fixedEncodeURIComponent(artist).replace(/%20/g, '+');
+    let tmpTracks = tracks;
+    tracks.forEach(track => {
+      if (track.indexOf('/') != -1){
+        let songArray = track.split('/');
+        songArray = songArray.map(s => s.trim());
+        tmpTracks = songArray.concat(tmpTracks);
+      }
+    });
+    console.log(tmpTracks);
+    tmpTracks = Array.from(new Set(tmpTracks));
+    console.log(tmpTracks);
+    tracks = tmpTracks;
+
+    let artist = readCookie('artistName').trim();
+    const artistQuery = fixedEncodeURIComponent(artist).replace(/%20/g, '+');
     let completeQueryCount = 0;
     const unavailableTracks = [];
     const availableTracks = [];
