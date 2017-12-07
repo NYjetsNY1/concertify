@@ -144,8 +144,8 @@ class Show extends React.Component {
 
     fetch('v1/setsToSpotify', myInit).then(response => {
       response.json().then(data => {
-        console.log(data);
-        location.href = 'https://open.spotify.com/collection/playlists';
+        console.log(`https://open.spotify.com/user/${data.uID}/playlist/${data.playlist_id}`);
+        location.href = `https://open.spotify.com/user/${data.uID}/playlist/${data.playlist_id}`
       });
     });
     console.log(this.state.spotifyURIs);

@@ -116,9 +116,11 @@ function addSongsToPlaylist(options, playlist_id, tracks, res) {
   function callback(error, response, body) {
     if ((!error && response.statusCode == 200) || response.statusCode == 201) {
       console.log('The playlist was created.');
+      console.log(user.id)
       res.status(200).send({
         body: 'Playlist Successfully Created',
-        playlist_id,
+        playlist_id: playlist_id,
+        uID: user.id
       });
     } else {
       console.log('An error occurred when creating the playlist.');

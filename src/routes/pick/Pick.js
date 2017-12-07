@@ -16,6 +16,7 @@ import moment from 'moment';
 import DatePicker from 'material-ui/DatePicker';
 import FlatButton from 'material-ui/FlatButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const styles = {
   uploadButton: {
@@ -97,15 +98,11 @@ class Pick extends React.Component {
     let makeRequest = false;
 
     const getArtist = {
-      url: `https://cors-anywhere.herokuapp.com/https://api.setlist.fm/rest/1.0/search/artists?artistName=${
-        artistName
-      }&p=1&sort=relevance`,
+      url: `https://cors-anywhere.herokuapp.com/https://api.setlist.fm/rest/1.0/search/artists?artistName=${artistName}&p=1&sort=relevance`,
       headers: {
         'x-api-key': '80231ae9-f9b4-40e0-8865-70baee8fe533',
         Accept: 'application/json',
-        origin: `https://api.setlist.fm/rest/1.0/search/artists?artistName=${
-          artistName
-        }&p=1&sort=relevance`,
+        origin: `https://api.setlist.fm/rest/1.0/search/artists?artistName=${artistName}&p=1&sort=relevance`,
       },
     };
 
@@ -113,7 +110,8 @@ class Pick extends React.Component {
       if (!error && response.statusCode === 200) {
         body = JSON.parse(body);
         for (let i = 0; i < body.artist.length; i++) {
-          if (body.artist[i].name.toLowerCase() ===
+          if (
+            body.artist[i].name.toLowerCase() ===
               artistActualName.trim().toLowerCase() &&
             body.artist[i].tmid !== undefined
           ) {
@@ -123,8 +121,9 @@ class Pick extends React.Component {
         }
         if (MBID === '') {
           for (let i = 0; i < body.artist.length; i++) {
-            if (body.artist[i].name.toLowerCase() ===
-                artistActualName.trim().toLowerCase()
+            if (
+              body.artist[i].name.toLowerCase() ===
+              artistActualName.trim().toLowerCase()
             ) {
               MBID = body.artist[i].mbid;
               makeRequest = true;
@@ -132,15 +131,11 @@ class Pick extends React.Component {
           }
         }
         const getSetlist = {
-          url: `https://cors-anywhere.herokuapp.com/https://api.setlist.fm/rest/1.0/artist/${
-            MBID
-          }/setlists?p=1`,
+          url: `https://cors-anywhere.herokuapp.com/https://api.setlist.fm/rest/1.0/artist/${MBID}/setlists?p=1`,
           headers: {
             'x-api-key': '80231ae9-f9b4-40e0-8865-70baee8fe533',
             Accept: 'application/json',
-            origin: `https://api.setlist.fm/rest/1.0/artist/${
-              MBID
-            }/setlists?p=1`,
+            origin: `https://api.setlist.fm/rest/1.0/artist/${MBID}/setlists?p=1`,
           },
         };
 
@@ -204,11 +199,15 @@ class Pick extends React.Component {
 
   onVenueClick(ev) {
     const venueName = ev.target.innerText;
-    if (!this.state.selectedVenues.includes(venueName.toLowerCase().substr(0, venueName.indexOf("(")-1))) {
+    if (
+      !this.state.selectedVenues.includes(
+        venueName.toLowerCase().substr(0, venueName.indexOf('(') - 1),
+      )
+    ) {
       ev.target.parentElement.style.backgroundImage = `linear-gradient(#27f274, #27f274)`;
-      let newSelectedVenues = [venueName.toLowerCase().substr(0,venueName.indexOf('(') - 1)].concat(
-        this.state.selectedVenues,
-      );
+      const newSelectedVenues = [
+        venueName.toLowerCase().substr(0, venueName.indexOf('(') - 1),
+      ].concat(this.state.selectedVenues);
       this.setState({ selectedVenues: newSelectedVenues });
     } else {
       ev.target.parentElement.style.backgroundImage = `none`;
