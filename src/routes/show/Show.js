@@ -34,6 +34,7 @@ class Show extends React.Component {
       spotifyURIs: [],
     };
     this.getSongUri = this.getSongUri.bind(this);
+    this.submit = this.submit.bind(this);
   }
 
   componentDidMount() {
@@ -54,11 +55,11 @@ class Show extends React.Component {
   getSongUri() {
     let data = sessionStorage.getItem('selectedSongs');
     data = JSON.parse(data);
-    let songs = data.map(d => d.name);
+    const songs = data.map(d => d.name);
     let tracks = new Set(songs);
     console.log(tracks);
     tracks = Array.from(tracks);
-    console.log(tracks)
+    console.log(tracks);
     let artist = readCookie('artistName');
     artist = artist.trim();
     const artistQuery = artist.replace(/ /g, '+');
@@ -109,25 +110,29 @@ class Show extends React.Component {
               spotifyURIs: availableTrackURIs,
             });
             const sendingTracks = JSON.stringify({ availableTracks });
-            const headers = new Headers({
-              'Content-Type': 'application/json',
-              Accept: 'application/json',
-            });
-
-            const myInit = {
-              method: 'POST',
-              headers,
-              body: JSON.stringify({ availableTrackURIs }),
-            };
-
-            fetch('v1/setsToSpotify', myInit).then(response => {
-              console.log(response);
-            });
             return availableTracks;
           }
         });
       });
     });
+  }
+
+  submit(){
+    let headers = new Headers({
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    });
+
+    let spotifyURIs = this.state.spotifyURIs;
+    let myInit = {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ spotifyURIs }),
+    };
+
+    fetch('v1/setsToSpotify', myInit)
+      .then(response => { console.log(response) });
+    console.log(this.state.spotifyURIs)
   }
 
   render() {
@@ -164,7 +169,7 @@ class Show extends React.Component {
           </div>
         </div>
         <div>
-          <button className={s.button} onClick={this.getSongUri}>
+          <button className={s.button} onClick={this.submit}>
             Create Spotify Playlist
           </button>
         </div>
