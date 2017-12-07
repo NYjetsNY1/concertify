@@ -96,7 +96,7 @@ app.get(
   },
 );
 
-var user;
+let user;
 
 app.get(
   '/auth',
@@ -111,15 +111,15 @@ function addSongsToPlaylist(options, playlist_id, tracks, res) {
   options.url = `https://cors-anywhere.herokuapp.com/${url}`;
   options.headers.origin = url;
   options.json = {
-    uris: tracks
+    uris: tracks,
   };
   function callback(error, response, body) {
     if ((!error && response.statusCode == 200) || response.statusCode == 201) {
       console.log('The playlist was created.');
       res.status(200).send({
-                          body: "Playlist Successfully Created",
-                          playlist_id: playlist_id
-                            });
+        body: 'Playlist Successfully Created',
+        playlist_id,
+      });
     } else {
       console.log('An error occurred when creating the playlist.');
     }
