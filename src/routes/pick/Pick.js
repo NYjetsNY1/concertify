@@ -90,7 +90,7 @@ class Pick extends React.Component {
   // heroku create
   // git push heroku master
   componentDidMount() {
-    const artistName = this.readCookie('artistName').replace(' ', '%20');
+    const artistName = this.readCookie('artistName').replace(/ /g, '%20');
     const artistActualName = this.readCookie('artistName');
     this.setState({ artistName: artistActualName });
     let MBID = '';
@@ -111,9 +111,7 @@ class Pick extends React.Component {
         for (let i = 0; i < body.artist.length; i++) {
           if (
             body.artist[i].name.toLowerCase() ===
-              artistActualName.trim().toLowerCase() &&
-            body.artist[i].tmid != undefined
-          ) {
+              artistActualName.trim().toLowerCase()) {
             MBID = body.artist[i].mbid;
             makeRequest = true;
           }
@@ -162,8 +160,10 @@ class Pick extends React.Component {
   getVenues(setlist) {
     const venues = new Set();
     setlist.forEach(concert => {
-      if (concert.venue.name != undefined) {
-        venues.add(concert.venue.name);
+      if (concert.venue.name != undefined && concert.eventDate != undefined) {
+        let tmpDate = concert.eventDate.split('-');
+        let eventDate = [tmpDate[1], tmpDate[0], tmpDate[2]].join('-');
+        venues.add(concert.venue.name + ' (' + eventDate + ')');
       }
     });
     return [...venues];
@@ -187,7 +187,7 @@ class Pick extends React.Component {
     const venueName = ev.target.innerText;
     if (!this.state.selectedVenues.includes(venueName.toLowerCase())) {
       ev.target.parentElement.style.backgroundImage = `linear-gradient(#27f274, #27f274)`;
-      const newSelectedVenues = [venueName.toLowerCase()].concat(
+      const newSelectedVenues = [venueName.toLowerCase().substr(0,venueName.indexOf('(') - 1)].concat(
         this.state.selectedVenues,
       );
       this.setState({ selectedVenues: newSelectedVenues });
@@ -224,7 +224,9 @@ class Pick extends React.Component {
     let my_songs = [];
     my_setlist.forEach(setlist => {
       if (this.filterIncludesSetList(setlist.tour, setlist.venue)) {
-        my_songs = my_songs.concat(setlist.sets.set[0].song);
+        if(setlist.sets.set.length != 0){
+          my_songs = my_songs.concat(setlist.sets.set[0].song);
+        }
         if (setlist.sets.set.length > 1) {
           my_songs = my_songs.concat(setlist.sets.set[1].song);
         }
