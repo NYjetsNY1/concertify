@@ -52,7 +52,7 @@ class Home extends React.Component {
                 id="artistName"
                 type="text"
                 name="artistName"
-                placeholder="ArtistName"
+                placeholder="Type Artist Name Here"
                 onKeyPressed = {this.onKeyPressed}
                 autoFocus // eslint-disable-line jsx-a11y/no-autofocus
               />
