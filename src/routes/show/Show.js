@@ -40,15 +40,15 @@ class Show extends React.Component {
   componentDidMount() {
     let data = sessionStorage.getItem('selectedSongs');
     data = JSON.parse(data);
-    let songs = []
-    if(data != null){
+    let songs = [];
+    if (data != null) {
       songs = data.map(d => d.name);
       songs = new Set(songs);
       songs = Array.from(songs);
     }
     this.setState({
       artist: readCookie('artistName'),
-      songs: songs,
+      songs,
     });
     this.getSongUri();
   }
@@ -59,10 +59,12 @@ class Show extends React.Component {
     let data = sessionStorage.getItem('selectedSongs');
     data = JSON.parse(data);
     let songs = [];
-    if(data != null){
+    if (data != null) {
       songs = data.map(d => d.name);
+      songs = new Set(songs);
+      songs = Array.from(songs);
     }
-    let tracks = new Set(songs);
+    let tracks = songs
     console.log(tracks);
     tracks = Array.from(tracks);
     console.log(tracks);
@@ -123,27 +125,26 @@ class Show extends React.Component {
     });
   }
 
-  submit(){
-    let headers = new Headers({
+  submit() {
+    const headers = new Headers({
       'Content-Type': 'application/json',
       Accept: 'application/json',
     });
 
-    let spotifyURIs = this.state.spotifyURIs;
-    let myInit = {
+    const spotifyURIs = this.state.spotifyURIs;
+    const myInit = {
       method: 'POST',
       headers,
       body: JSON.stringify({ spotifyURIs }),
     };
 
-    fetch('v1/setsToSpotify', myInit)
-      .then(response => {
-        response.json().then(data => {
-                                      console.log(data)
-                                      location.href = 'https://open.spotify.com/collection/playlists';
-                                    })
+    fetch('v1/setsToSpotify', myInit).then(response => {
+      response.json().then(data => {
+        console.log(data);
+        location.href = 'https://open.spotify.com/collection/playlists';
       });
-    console.log(this.state.spotifyURIs)
+    });
+    console.log(this.state.spotifyURIs);
   }
 
   render() {
