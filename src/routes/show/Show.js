@@ -131,7 +131,9 @@ class Show extends React.Component {
     };
 
     fetch('v1/setsToSpotify', myInit)
-      .then(response => { console.log(response) });
+      .then(response => {
+        response.json().then(data => {console.log(data)})
+      });
     console.log(this.state.spotifyURIs)
   }
 

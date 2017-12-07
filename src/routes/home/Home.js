@@ -29,10 +29,10 @@ class Home extends React.Component {
   }
 
   onKeyPressed(e) {
-    console.log(e.code);
     if (e.code == 'Enter') {
+      e.preventDefault();
       this.saveArtistName();
-      window.history = '/pick';
+      location.href = '/pick';
     }
   }
 
@@ -44,7 +44,7 @@ class Home extends React.Component {
         </div>
         <hr />
 
-        <form method="post">
+        <form>
           <div className={s.formGroup}>
             <label className={s.label} htmlFor="artistName">
               <input
@@ -53,6 +53,7 @@ class Home extends React.Component {
                 type="text"
                 name="artistName"
                 placeholder="ArtistName"
+                onKeyPressed = {this.onKeyPressed}
                 autoFocus // eslint-disable-line jsx-a11y/no-autofocus
               />
             </label>
