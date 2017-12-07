@@ -24,6 +24,12 @@ function readCookie(name) {
   return null;
 }
 
+function fixedEncodeURIComponent(str) {
+  return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
+    return '%' + c.charCodeAt(0).toString(16);
+  });
+}
+
 class Show extends React.Component {
   constructor(props) {
     super(props);
@@ -70,17 +76,17 @@ class Show extends React.Component {
     console.log(tracks);
     let artist = readCookie('artistName');
     artist = artist.trim();
-    const artistQuery = artist.replace(/ /g, '+');
+    let artistQuery = fixedEncodeURIComponent(artist).replace(/%20/g, '+');
     let completeQueryCount = 0;
     const unavailableTracks = [];
     const availableTracks = [];
     const accessToken = readCookie('access_token');
     tracks.forEach(trackName => {
       trackName = trackName.trim();
-      const trackQuery = trackName
-        .replace(/ /g, '+')
-        .replace(/\//g, '+')
-        .replace(/\\/g, '+');
+      let trackQuery = trackName
+        .replace(/\//g, ' ')
+        .replace(/\\/g, ' ');
+      trackQuery = fixedEncodeURIComponent(trackQuery).replace(/%20/g, '+');
       fetch(
         `https://api.spotify.com/v1/search?q=artist:${artistQuery}%20track:${trackQuery}&type=track`,
         {
