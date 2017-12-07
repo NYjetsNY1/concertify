@@ -97,11 +97,11 @@ class Pick extends React.Component {
     let makeRequest = false;
 
     const getArtist = {
-      url: `https://cors-anywhere.herokuapp.com/https://api.setlist.fm/rest/1.0/search/artists?artistName=${artistName}&p=1&sort=sortName`,
+      url: `https://cors-anywhere.herokuapp.com/https://api.setlist.fm/rest/1.0/search/artists?artistName=${artistName}&p=1&sort=relevance`,
       headers: {
         'x-api-key': '80231ae9-f9b4-40e0-8865-70baee8fe533',
         Accept: 'application/json',
-        origin: `https://api.setlist.fm/rest/1.0/search/artists?artistName=${artistName}&p=1&sort=sortName`,
+        origin: `https://api.setlist.fm/rest/1.0/search/artists?artistName=${artistName}&p=1&sort=relevance`,
       },
     };
 
