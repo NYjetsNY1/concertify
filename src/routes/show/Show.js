@@ -131,6 +131,7 @@ class Show extends React.Component {
   }
 
   submit() {
+    this.openModal()
     const headers = new Headers({
       'Content-Type': 'application/json',
       Accept: 'application/json',
@@ -155,6 +156,18 @@ class Show extends React.Component {
     console.log(this.state.spotifyURIs);
   }
 
+  openModal(){
+    let modal = document.getElementById('myModal');
+    modal.style.display = "block";
+  }
+
+closeModal(){
+  let modal = document.getElementById('myModal');
+  modal.style.display = "none";
+  modal = document.getElementById('gameCompleteModal');
+  modal.style.display = "none";
+}
+
   render() {
     const songInputs = this.state.songs.map((song, index) => (
       <Song key={index} song={song} />
@@ -165,6 +178,13 @@ class Show extends React.Component {
     ));
     return (
       <div className={s.banner}>
+        <div id="myModal" className={s.modal}>
+              <div className={s.modalcontent}>
+                <span onClick={this.closeModal} className={s.close}>&times;</span>
+                <h2>Success!</h2>
+                <h3>You will be redirected to your new Spotify Playlist shortly </h3>
+              </div>
+            </div>
         <div className={s.container}>
           <h1 className={s.bannerTitle}>Artist: {this.state.artist}</h1>
         </div>
