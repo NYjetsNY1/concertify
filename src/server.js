@@ -127,10 +127,11 @@ function addSongsToPlaylist(options, playlist_id, tracks, res) {
   request(options, callback);
 }
 
-function createNewPlaylist(tracks, res) {
+function createNewPlaylist(artist, tracks, res) {
   const url = `https://api.spotify.com/v1/users/${user.id}/playlists`;
   const cors_url = `https://cors-anywhere.herokuapp.com/${url}`;
   const bearer_token = `Bearer ${user.access_token}`;
+  let playlistName = `Concertify ${artist} Playlist`;
   const options = {
     url: cors_url,
     headers: {
@@ -141,7 +142,7 @@ function createNewPlaylist(tracks, res) {
     method: 'POST',
     json: {
       description: 'Created with Concertify!',
-      name: 'Concertify Playlist',
+      name: playlistName,
       public: false,
     },
   };
@@ -166,7 +167,7 @@ app.get(
 );
 
 app.post('/v1/setsToSpotify', (req, res) => {
-  createNewPlaylist(req.body.spotifyURIs, res);
+  createNewPlaylist(req.body.artist, req.body.spotifyURIs, res);
 });
 
 //

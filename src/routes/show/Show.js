@@ -77,7 +77,7 @@ class Show extends React.Component {
     const accessToken = readCookie('access_token');
     tracks.forEach(trackName => {
       trackName = trackName.trim();
-      const trackQuery = trackName.replace(/ /g, '+');
+      const trackQuery = trackName.replace(/ /g, '+').replace(/\//g, '+').replace(/\\/g, '+');
       fetch(
         `https://api.spotify.com/v1/search?q=artist:${artistQuery}%20track:${trackQuery}&type=track`,
         {
@@ -99,6 +99,7 @@ class Show extends React.Component {
             });
           } else {
             // song is there
+            artist = data.tracks.items[0].artists[0].name;
             availableTracks.push({
               artist: data.tracks.items[0].artists[0].name,
               track: data.tracks.items[0].name,
@@ -106,7 +107,7 @@ class Show extends React.Component {
             });
           }
           if (completeQueryCount === tracks.length) {
-            // after all calls have beend one
+            // after all calls have been done
             const availableTrackURIs = availableTracks.map(
               track => track.spotifyUri,
             );
@@ -114,6 +115,7 @@ class Show extends React.Component {
               track => track.track,
             );
             this.setState({
+              artist: artist,
               spotifyTracks: availableTrackNames,
               spotifyURIs: availableTrackURIs,
             });
@@ -135,7 +137,9 @@ class Show extends React.Component {
     const myInit = {
       method: 'POST',
       headers,
-      body: JSON.stringify({ spotifyURIs }),
+      body: JSON.stringify({
+        artist: this.state.artist,
+        spotifyURIs }),
     };
 
     fetch('v1/setsToSpotify', myInit).then(response => {
