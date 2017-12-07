@@ -198,16 +198,11 @@ class Pick extends React.Component {
   }
 
   onVenueClick(ev) {
-    const venueName = ev.target.innerText;
-    if (
-      !this.state.selectedVenues.includes(
-        venueName.toLowerCase().substr(0, venueName.indexOf('(') - 1),
-      )
-    ) {
+    let venueName = ev.target.innerText;
+    venueName = venueName.toLowerCase().substr(0, venueName.indexOf('(') - 1);
+    if (!this.state.selectedVenues.includes(venueName)) {
       ev.target.parentElement.style.backgroundImage = `linear-gradient(#27f274, #27f274)`;
-      const newSelectedVenues = [
-        venueName.toLowerCase().substr(0, venueName.indexOf('(') - 1),
-      ].concat(this.state.selectedVenues);
+      const newSelectedVenues = [venueName].concat(this.state.selectedVenues);
       this.setState({ selectedVenues: newSelectedVenues });
     } else {
       ev.target.parentElement.style.backgroundImage = `none`;
@@ -220,10 +215,10 @@ class Pick extends React.Component {
   }
 
   onTourClick(ev) {
-    const tourName = ev.target.innerText;
-    if (!this.state.selectedTours.includes(tourName.toLowerCase())) {
+    let tourName = ev.target.innerText.toLowerCase();
+    if (!this.state.selectedTours.includes(tourName)) {
       ev.target.parentElement.style.backgroundImage = `linear-gradient(#27f274, #27f274)`;
-      const newSelectedTours = [tourName.toLowerCase()].concat(
+      const newSelectedTours = [tourName].concat(
         this.state.selectedTours,
       );
       this.setState({ selectedTours: newSelectedTours });
