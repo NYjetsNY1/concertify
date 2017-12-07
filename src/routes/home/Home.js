@@ -61,7 +61,7 @@ class Home extends React.Component {
         <div className={s.formGroup}>
           <a href="/pick">
             <button className={s.button} onClick={this.saveArtistName}>
-              Get Playlist
+              Get Setlists
             </button>
           </a>
         </div>

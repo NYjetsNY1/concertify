@@ -314,7 +314,7 @@ class Pick extends React.Component {
                 onClick={this.getSongSelection}
                 type="submit"
               >
-                Get Setlists
+                Show Playlist Songs
               </button>
             </a>
           </div>
