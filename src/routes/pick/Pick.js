@@ -97,11 +97,15 @@ class Pick extends React.Component {
     let makeRequest = false;
 
     const getArtist = {
-      url: `https://cors-anywhere.herokuapp.com/https://api.setlist.fm/rest/1.0/search/artists?artistName=${artistName}&p=1&sort=relevance`,
+      url: `https://cors-anywhere.herokuapp.com/https://api.setlist.fm/rest/1.0/search/artists?artistName=${
+        artistName
+      }&p=1&sort=relevance`,
       headers: {
         'x-api-key': '80231ae9-f9b4-40e0-8865-70baee8fe533',
         Accept: 'application/json',
-        origin: `https://api.setlist.fm/rest/1.0/search/artists?artistName=${artistName}&p=1&sort=relevance`,
+        origin: `https://api.setlist.fm/rest/1.0/search/artists?artistName=${
+          artistName
+        }&p=1&sort=relevance`,
       },
     };
 
@@ -109,19 +113,34 @@ class Pick extends React.Component {
       if (!error && response.statusCode === 200) {
         body = JSON.parse(body);
         for (let i = 0; i < body.artist.length; i++) {
-          if (
-            body.artist[i].name.toLowerCase() ===
-              artistActualName.trim().toLowerCase()) {
+          if (body.artist[i].name.toLowerCase() ===
+              artistActualName.trim().toLowerCase() &&
+            body.artist[i].tmid !== undefined
+          ) {
             MBID = body.artist[i].mbid;
             makeRequest = true;
           }
         }
+        if (MBID === '') {
+          for (let i = 0; i < body.artist.length; i++) {
+            if (body.artist[i].name.toLowerCase() ===
+                artistActualName.trim().toLowerCase()
+            ) {
+              MBID = body.artist[i].mbid;
+              makeRequest = true;
+            }
+          }
+        }
         const getSetlist = {
-          url: `https://cors-anywhere.herokuapp.com/https://api.setlist.fm/rest/1.0/artist/${MBID}/setlists?p=1`,
+          url: `https://cors-anywhere.herokuapp.com/https://api.setlist.fm/rest/1.0/artist/${
+            MBID
+          }/setlists?p=1`,
           headers: {
             'x-api-key': '80231ae9-f9b4-40e0-8865-70baee8fe533',
             Accept: 'application/json',
-            origin: `https://api.setlist.fm/rest/1.0/artist/${MBID}/setlists?p=1`,
+            origin: `https://api.setlist.fm/rest/1.0/artist/${
+              MBID
+            }/setlists?p=1`,
           },
         };
 
@@ -161,9 +180,9 @@ class Pick extends React.Component {
     const venues = new Set();
     setlist.forEach(concert => {
       if (concert.venue.name != undefined && concert.eventDate != undefined) {
-        let tmpDate = concert.eventDate.split('-');
-        let eventDate = [tmpDate[1], tmpDate[0], tmpDate[2]].join('-');
-        venues.add(concert.venue.name + ' (' + eventDate + ')');
+        const tmpDate = concert.eventDate.split('-');
+        const eventDate = [tmpDate[1], tmpDate[0], tmpDate[2]].join('-');
+        venues.add(`${concert.venue.name} (${eventDate})`);
       }
     });
     return [...venues];
@@ -187,9 +206,9 @@ class Pick extends React.Component {
     const venueName = ev.target.innerText;
     if (!this.state.selectedVenues.includes(venueName.toLowerCase())) {
       ev.target.parentElement.style.backgroundImage = `linear-gradient(#27f274, #27f274)`;
-      const newSelectedVenues = [venueName.toLowerCase().substr(0,venueName.indexOf('(') - 1)].concat(
-        this.state.selectedVenues,
-      );
+      const newSelectedVenues = [
+        venueName.toLowerCase().substr(0, venueName.indexOf('(') - 1),
+      ].concat(this.state.selectedVenues);
       this.setState({ selectedVenues: newSelectedVenues });
     } else {
       ev.target.parentElement.style.backgroundImage = `none`;
@@ -224,7 +243,7 @@ class Pick extends React.Component {
     let my_songs = [];
     my_setlist.forEach(setlist => {
       if (this.filterIncludesSetList(setlist.tour, setlist.venue)) {
-        if(setlist.sets.set.length != 0){
+        if (setlist.sets.set.length != 0) {
           my_songs = my_songs.concat(setlist.sets.set[0].song);
         }
         if (setlist.sets.set.length > 1) {
