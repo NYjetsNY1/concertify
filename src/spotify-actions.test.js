@@ -3,9 +3,11 @@
     -> This can be done by manually retrieving a Spotify access token from
        the web API console.
   These tests assume successful calls to the Spotify API work as intended.
+  TODO: mock API calls?
 * */
 
 import SpotifyActions from './spotify-actions';
+import 'babel-polyfill';
 
 const user = {
   access_token: '',
@@ -22,32 +24,20 @@ const res = {
 };
 
 describe('Unit Tests', () => {
-  test('addSongsToPlaylist() called on success of createNewPlaylist()', () => {
+  test('addSongsToPlaylist() called on success of createNewPlaylist()', async () => {
     SpotifyActions.addSongsToPlaylist = jest.spyOn(
       SpotifyActions,
       'addSongsToPlaylist',
     );
-    return SpotifyActions.createNewPlaylist(
-      'Michael Buble',
-      tracks,
-      user,
-      res,
-    ).then(response => {
-      expect(SpotifyActions.addSongsToPlaylist).toBeCalled();
-    });
+    await SpotifyActions.createNewPlaylist('Michael Buble', tracks, user, res);
+    expect(SpotifyActions.addSongsToPlaylist).toBeCalled();
   });
 });
 
 describe('Integration Tests', () => {
-  test('Both Spotify API calls are successfully executed', () => {
+  test('Both Spotify API calls are successfully executed', async () => {
     global.console = { log: jest.fn() };
-    return SpotifyActions.createNewPlaylist(
-      'Michael Buble',
-      tracks,
-      user,
-      res,
-    ).then(() => {
-      expect(console.log).toBeCalledWith('The playlist was created.');
-    });
+    await SpotifyActions.createNewPlaylist('Michael Buble', tracks, user, res);
+    expect(console.log).toBeCalledWith('The playlist was created.');
   });
 });
