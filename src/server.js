@@ -29,8 +29,8 @@ import models from './data/models';
 import schema from './data/schema';
 import assets from './assets.json'; // eslint-disable-line import/no-unresolved
 import config from './config';
-import request from 'request';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import SpotifyActions from './spotify-actions';
 
 const app = express();
 
@@ -106,53 +106,6 @@ app.get(
   (req, res) => {},
 );
 
-function addSongsToPlaylist(options, playlist_id, tracks, res) {
-  const url = `https://api.spotify.com/v1/users/${user.id}/playlists/${playlist_id}/tracks`;
-  options.url = `https://cors-anywhere.herokuapp.com/${url}`;
-  options.headers.origin = url;
-  options.json = {
-    uris: tracks,
-  };
-  function callback(error, response, body) {
-    if ((!error && response.statusCode == 200) || response.statusCode == 201) {
-      console.log('The playlist was created.');
-      res.status(200).send({
-        body: 'Playlist Successfully Created',
-        playlist_id,
-      });
-    } else {
-      console.log('An error occurred when creating the playlist.');
-    }
-  }
-  request(options, callback);
-}
-
-function createNewPlaylist(tracks, res) {
-  const url = `https://api.spotify.com/v1/users/${user.id}/playlists`;
-  const cors_url = `https://cors-anywhere.herokuapp.com/${url}`;
-  const bearer_token = `Bearer ${user.access_token}`;
-  const options = {
-    url: cors_url,
-    headers: {
-      Authorization: bearer_token,
-      Accept: 'application/json',
-      origin: url,
-    },
-    method: 'POST',
-    json: {
-      description: 'Created with Concertify!',
-      name: 'Concertify Playlist',
-      public: false,
-    },
-  };
-  function callback(error, response, body) {
-    if ((!error && response.statusCode == 200) || response.statusCode == 201) {
-      addSongsToPlaylist(options, response.body.id, tracks, res);
-    }
-  }
-  request(options, callback);
-}
-
 app.get(
   '/auth/callback',
   passport.authenticate('spotify', { failureRedirect: '/login' }),
@@ -166,7 +119,7 @@ app.get(
 );
 
 app.post('/v1/setsToSpotify', (req, res) => {
-  createNewPlaylist(req.body.spotifyURIs, res);
+  SpotifyActions.createNewPlaylist(req.body.spotifyURIs, user, res);
 });
 
 //

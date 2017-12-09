@@ -1,3 +1,7 @@
+// To actually include this test in the test suite, rename this file
+// to Layout.test.js and rename __snapshots__/Layout-test.js.snap to
+// Layout.test.js.snap
+
 /**
  * React Starter Kit (https://www.reactstarterkit.com/)
  *
