@@ -8,8 +8,8 @@
 import SpotifyActions from './spotify-actions';
 
 const user = {
-  access_token: 'BQCHl1YLY_3Tz5BvWF3hOLq4EQQev1eJBab-ElUTAzrganAnYal1f-p2gfEV2adfLH_Hup4Bs4tuv7bs52oqSN459bLOkcYwkSpxYtSfS6zUwjlt6KuJ5xaIaZyiLldQrFNRyEejrR--331IYiWBm4FRLE2GyLcXbNoLYN7JgbKrQQ4JYoBSVko62IjF718Qe2sqJBw-sts',
-  id: 'blue_lu'
+  access_token: '',
+  id: ''
 };
 
 const tracks = ['spotify:track:0lLdorYw7lVrJydTINhWdI'];
