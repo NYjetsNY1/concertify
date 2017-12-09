@@ -1,14 +1,15 @@
 import rp from 'request-promise';
 
-let SpotifyActions = {
-    createNewPlaylist,
-    addSongsToPlaylist
+const SpotifyActions = {
+  createNewPlaylist,
+  addSongsToPlaylist,
 };
 
-function createNewPlaylist(tracks, user, res) {
+function createNewPlaylist(artist, tracks, user, res) {
   const url = `https://api.spotify.com/v1/users/${user.id}/playlists`;
   const cors_url = `https://cors-anywhere.herokuapp.com/${url}`;
   const bearer_token = `Bearer ${user.access_token}`;
+  const playlistName = `Concertify ${artist} Playlist`;
   const options = {
     url: cors_url,
     headers: {
@@ -19,19 +20,23 @@ function createNewPlaylist(tracks, user, res) {
     method: 'POST',
     json: {
       description: 'Created with Concertify!',
-      name: 'Concertify Playlist',
+      name: playlistName,
       public: false,
     },
-    resolveWithFullResponse: true
   };
   function callback(error, response, body) {
     if ((!error && response.statusCode == 200) || response.statusCode == 201) {
-      console.log('Playlist creation successful! Adding tracks...');
-      SpotifyActions.addSongsToPlaylist(options, response.body.id, tracks, user, res);
+      SpotifyActions.addSongsToPlaylist(
+        options,
+        response.body.id,
+        tracks,
+        user,
+        res,
+      );
     }
   }
   return rp(options, callback);
-};
+}
 
 function addSongsToPlaylist(options, playlist_id, tracks, user, res) {
   const url = `https://api.spotify.com/v1/users/${user.id}/playlists/${playlist_id}/tracks`;
@@ -42,16 +47,18 @@ function addSongsToPlaylist(options, playlist_id, tracks, user, res) {
   };
   function callback(error, response, body) {
     if ((!error && response.statusCode == 200) || response.statusCode == 201) {
-      console.log('The given tracks were successfully added to the playlist!');
+      console.log('The playlist was created.');
+      console.log(user.id);
       res.status(200).send({
         body: 'Playlist Successfully Created',
-        playlist_id,
+        playlist_id: playlist_id,
+        uID: user.id,
       });
     } else {
-      console.log('An error occurred when adding the tracks.');
+      console.log('An error occurred when creating the playlist.');
     }
   }
   return rp(options, callback);
-};
+}
 
 export default SpotifyActions;

@@ -29,14 +29,10 @@ import models from './data/models';
 import schema from './data/schema';
 import assets from './assets.json'; // eslint-disable-line import/no-unresolved
 import config from './config';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import SpotifyActions from './spotify-actions';
-import sslRedirect from 'heroku-ssl-redirect';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 const app = express();
-
-// Force users to access via HTTPS
-app.use(sslRedirect());
 
 //
 // Tell any CSS tooling (such as Material UI) to use all vendor prefixes if the
@@ -118,12 +114,12 @@ app.get(
       maxAge: 1000 * 60 * 60 * 24 * 180,
     });
     user = req.user;
-    res.redirect('/home');
+    res.redirect('https://cs4278-concertify.herokuapp.com/home');
   },
 );
 
 app.post('/v1/setsToSpotify', (req, res) => {
-  SpotifyActions.createNewPlaylist(req.body.spotifyURIs, user, res);
+  SpotifyActions.createNewPlaylist(req.body.artist, req.body.spotifyURIs, user, res);
 });
 
 //
