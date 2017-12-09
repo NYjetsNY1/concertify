@@ -25,19 +25,25 @@ const res = {
 
 describe('Unit Tests', () => {
   test('addSongsToPlaylist() called on success of createNewPlaylist()', async () => {
-    SpotifyActions.addSongsToPlaylist = jest.spyOn(
-      SpotifyActions,
-      'addSongsToPlaylist',
-    );
-    await SpotifyActions.createNewPlaylist('Michael Buble', tracks, user, res);
+    expect.assertions(2);
+    SpotifyActions.addSongsToPlaylist = jest.spyOn(SpotifyActions,
+      'addSongsToPlaylist');
+    const response = await SpotifyActions.createNewPlaylist(
+      'Michael Buble', tracks, user, res);
+    expect(response.statusCode).toBe(201);
     expect(SpotifyActions.addSongsToPlaylist).toBeCalled();
   });
 });
 
 describe('Integration Tests', () => {
   test('Both Spotify API calls are successfully executed', async () => {
+    expect.assertions(3);
     global.console = { log: jest.fn() };
-    await SpotifyActions.createNewPlaylist('Michael Buble', tracks, user, res);
+    const response = await SpotifyActions.createNewPlaylist(
+      'Michael Buble', tracks, user, res);
+    expect(response.statusCode).toBe(201);
+    expect(SpotifyActions.addSongsToPlaylist).toBeCalledWith(
+      expect.anything(), response.body.id, tracks, user, res);
     expect(console.log).toBeCalledWith('The playlist was created.');
   });
 });

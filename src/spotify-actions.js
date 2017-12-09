@@ -23,16 +23,12 @@ function createNewPlaylist(artist, tracks, user, res) {
       name: playlistName,
       public: false,
     },
+    resolveWithFullResponse: true
   };
   function callback(error, response, body) {
     if ((!error && response.statusCode == 200) || response.statusCode == 201) {
-      SpotifyActions.addSongsToPlaylist(
-        options,
-        response.body.id,
-        tracks,
-        user,
-        res,
-      );
+      return SpotifyActions.addSongsToPlaylist(options, response.body.id,
+        tracks, user, res);
     }
   }
   return rp(options, callback);
