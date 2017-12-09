@@ -31,8 +31,12 @@ import assets from './assets.json'; // eslint-disable-line import/no-unresolved
 import config from './config';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import SpotifyActions from './spotify-actions';
+import sslRedirect from 'heroku-ssl-redirect';
 
 const app = express();
+
+// Force users to access via HTTPS
+app.use(sslRedirect());
 
 //
 // Tell any CSS tooling (such as Material UI) to use all vendor prefixes if the

@@ -23,14 +23,14 @@ class Login extends React.Component {
         <a href="/about">
         <div className={s.container}>
           <div className={s.formGroup}>
-            <h1>ABOUT US</h1>
+            <h1>About Us</h1>
           </div>
         </div>
       </a>
 
         <a href="/auth"><div className={s.cont2}>
           <div className={s.formGroup}>
-            <h1>Connect And Build</h1>
+            <h1>Create Playlist</h1>
           </div>
         </div>
       </a>

@@ -16,6 +16,7 @@ import moment from 'moment';
 import DatePicker from 'material-ui/DatePicker';
 import FlatButton from 'material-ui/FlatButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const styles = {
   uploadButton: {
@@ -111,9 +112,22 @@ class Pick extends React.Component {
         for (let i = 0; i < body.artist.length; i++) {
           if (
             body.artist[i].name.toLowerCase() ===
-              artistActualName.trim().toLowerCase()) {
+              artistActualName.trim().toLowerCase() &&
+            body.artist[i].tmid !== undefined
+          ) {
             MBID = body.artist[i].mbid;
             makeRequest = true;
+          }
+        }
+        if (MBID === '') {
+          for (let i = 0; i < body.artist.length; i++) {
+            if (
+              body.artist[i].name.toLowerCase() ===
+              artistActualName.trim().toLowerCase()
+            ) {
+              MBID = body.artist[i].mbid;
+              makeRequest = true;
+            }
           }
         }
         const getSetlist = {
@@ -161,9 +175,9 @@ class Pick extends React.Component {
     const venues = new Set();
     setlist.forEach(concert => {
       if (concert.venue.name != undefined && concert.eventDate != undefined) {
-        let tmpDate = concert.eventDate.split('-');
-        let eventDate = [tmpDate[1], tmpDate[0], tmpDate[2]].join('-');
-        venues.add(concert.venue.name + ' (' + eventDate + ')');
+        const tmpDate = concert.eventDate.split('-');
+        const eventDate = [tmpDate[1], tmpDate[0], tmpDate[2]].join('-');
+        venues.add(`${concert.venue.name} (${eventDate})`);
       }
     });
     return [...venues];
@@ -184,12 +198,11 @@ class Pick extends React.Component {
   }
 
   onVenueClick(ev) {
-    const venueName = ev.target.innerText;
-    if (!this.state.selectedVenues.includes(venueName.toLowerCase())) {
+    let venueName = ev.target.innerText;
+    venueName = venueName.toLowerCase().substr(0, venueName.indexOf('(') - 1);
+    if (!this.state.selectedVenues.includes(venueName)) {
       ev.target.parentElement.style.backgroundImage = `linear-gradient(#27f274, #27f274)`;
-      const newSelectedVenues = [venueName.toLowerCase().substr(0,venueName.indexOf('(') - 1)].concat(
-        this.state.selectedVenues,
-      );
+      const newSelectedVenues = [venueName].concat(this.state.selectedVenues);
       this.setState({ selectedVenues: newSelectedVenues });
     } else {
       ev.target.parentElement.style.backgroundImage = `none`;
@@ -202,10 +215,10 @@ class Pick extends React.Component {
   }
 
   onTourClick(ev) {
-    const tourName = ev.target.innerText;
-    if (!this.state.selectedTours.includes(tourName.toLowerCase())) {
+    let tourName = ev.target.innerText.toLowerCase();
+    if (!this.state.selectedTours.includes(tourName)) {
       ev.target.parentElement.style.backgroundImage = `linear-gradient(#27f274, #27f274)`;
-      const newSelectedTours = [tourName.toLowerCase()].concat(
+      const newSelectedTours = [tourName].concat(
         this.state.selectedTours,
       );
       this.setState({ selectedTours: newSelectedTours });
@@ -224,7 +237,7 @@ class Pick extends React.Component {
     let my_songs = [];
     my_setlist.forEach(setlist => {
       if (this.filterIncludesSetList(setlist.tour, setlist.venue)) {
-        if(setlist.sets.set.length != 0){
+        if (setlist.sets.set.length != 0) {
           my_songs = my_songs.concat(setlist.sets.set[0].song);
         }
         if (setlist.sets.set.length > 1) {

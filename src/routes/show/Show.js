@@ -24,6 +24,12 @@ function readCookie(name) {
   return null;
 }
 
+function fixedEncodeURIComponent(str) {
+  return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
+    return '%' + c.charCodeAt(0).toString(16);
+  });
+}
+
 class Show extends React.Component {
   constructor(props) {
     super(props);
@@ -40,15 +46,15 @@ class Show extends React.Component {
   componentDidMount() {
     let data = sessionStorage.getItem('selectedSongs');
     data = JSON.parse(data);
-    let songs = []
-    if(data != null){
+    let songs = [];
+    if (data != null) {
       songs = data.map(d => d.name);
       songs = new Set(songs);
-      songs = Array.from(songs);
+      songs = Array.from(songs).sort();
     }
     this.setState({
       artist: readCookie('artistName'),
-      songs: songs,
+      songs,
     });
     this.getSongUri();
   }
@@ -58,24 +64,38 @@ class Show extends React.Component {
   getSongUri() {
     let data = sessionStorage.getItem('selectedSongs');
     data = JSON.parse(data);
-    let songs = [];
-    if(data != null){
-      songs = data.map(d => d.name);
+    let tracks = [];
+    if (data != null) {
+      tracks = data.map(d => d.name);
+      tracks = new Set(tracks);
+      tracks = Array.from(tracks);
     }
-    let tracks = new Set(songs);
     console.log(tracks);
-    tracks = Array.from(tracks);
-    console.log(tracks);
-    let artist = readCookie('artistName');
-    artist = artist.trim();
-    const artistQuery = artist.replace(/ /g, '+');
+    let tmpTracks = tracks;
+    tracks.forEach(track => {
+      if (track.indexOf('/') != -1){
+        let songArray = track.split('/');
+        songArray = songArray.map(s => s.trim());
+        tmpTracks = songArray.concat(tmpTracks);
+      }
+    });
+    console.log(tmpTracks);
+    tmpTracks = Array.from(new Set(tmpTracks));
+    console.log(tmpTracks);
+    tracks = tmpTracks;
+
+    let artist = readCookie('artistName').trim();
+    const artistQuery = fixedEncodeURIComponent(artist).replace(/%20/g, '+');
     let completeQueryCount = 0;
     const unavailableTracks = [];
     const availableTracks = [];
     const accessToken = readCookie('access_token');
     tracks.forEach(trackName => {
       trackName = trackName.trim();
-      const trackQuery = trackName.replace(/ /g, '+');
+      let trackQuery = trackName
+        .replace(/\//g, ' ')
+        .replace(/\\/g, ' ');
+      trackQuery = fixedEncodeURIComponent(trackQuery).replace(/%20/g, '+');
       fetch(
         `https://api.spotify.com/v1/search?q=artist:${artistQuery}%20track:${trackQuery}&type=track`,
         {
@@ -97,6 +117,7 @@ class Show extends React.Component {
             });
           } else {
             // song is there
+            artist = data.tracks.items[0].artists[0].name;
             availableTracks.push({
               artist: data.tracks.items[0].artists[0].name,
               track: data.tracks.items[0].name,
@@ -104,7 +125,7 @@ class Show extends React.Component {
             });
           }
           if (completeQueryCount === tracks.length) {
-            // after all calls have beend one
+            // after all calls have been done
             const availableTrackURIs = availableTracks.map(
               track => track.spotifyUri,
             );
@@ -112,7 +133,8 @@ class Show extends React.Component {
               track => track.track,
             );
             this.setState({
-              spotifyTracks: availableTrackNames,
+              artist,
+              spotifyTracks: availableTrackNames.sort(),
               spotifyURIs: availableTrackURIs,
             });
             const sendingTracks = JSON.stringify({ availableTracks });
@@ -123,28 +145,43 @@ class Show extends React.Component {
     });
   }
 
-  submit(){
-    let headers = new Headers({
+  submit() {
+    this.openModal()
+    const headers = new Headers({
       'Content-Type': 'application/json',
       Accept: 'application/json',
     });
 
-    let spotifyURIs = this.state.spotifyURIs;
-    let myInit = {
+    const spotifyURIs = this.state.spotifyURIs;
+    const myInit = {
       method: 'POST',
       headers,
-      body: JSON.stringify({ spotifyURIs }),
+      body: JSON.stringify({
+        artist: this.state.artist,
+        spotifyURIs,
+      }),
     };
 
-    fetch('v1/setsToSpotify', myInit)
-      .then(response => {
-        response.json().then(data => {
-                                      console.log(data)
-                                      location.href = 'https://open.spotify.com/collection/playlists';
-                                    })
+    fetch('v1/setsToSpotify', myInit).then(response => {
+      response.json().then(data => {
+        console.log(`https://open.spotify.com/user/${data.uID}/playlist/${data.playlist_id}`);
+        location.href = `https://open.spotify.com/user/${data.uID}/playlist/${data.playlist_id}`
       });
-    console.log(this.state.spotifyURIs)
+    });
+    console.log(this.state.spotifyURIs);
   }
+
+  openModal(){
+    let modal = document.getElementById('myModal');
+    modal.style.display = "block";
+  }
+
+closeModal(){
+  let modal = document.getElementById('myModal');
+  modal.style.display = "none";
+  modal = document.getElementById('gameCompleteModal');
+  modal.style.display = "none";
+}
 
   render() {
     const songInputs = this.state.songs.map((song, index) => (
@@ -156,6 +193,13 @@ class Show extends React.Component {
     ));
     return (
       <div className={s.banner}>
+        <div id="myModal" className={s.modal}>
+              <div className={s.modalcontent}>
+                <span onClick={this.closeModal} className={s.close}>&times;</span>
+                <h2>Success!</h2>
+                <h3>You will be redirected to your new Spotify Playlist shortly </h3>
+              </div>
+            </div>
         <div className={s.container}>
           <h1 className={s.bannerTitle}>Artist: {this.state.artist}</h1>
         </div>
