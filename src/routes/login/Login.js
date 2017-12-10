@@ -14,27 +14,26 @@ import s from './Login.css';
 
 class Login extends React.Component {
   static propTypes = {
-    title: PropTypes.string.isRequired,
+    title: PropTypes.string,
   };
 
   render() {
     return (
       <div className={s.root}>
         <a href="/about">
-        <div className={s.container}>
-          <div className={s.formGroup}>
-            <h1>About Us</h1>
+          <div className={s.container}>
+            <div className={s.formGroup}>
+              <h1>About Us</h1>
+            </div>
           </div>
-        </div>
-      </a>
-
-        <a href="/auth"><div className={s.cont2}>
-          <div className={s.formGroup}>
-            <h1>Create Playlist</h1>
+        </a>
+        <a href="/auth">
+          <div className={s.cont2}>
+            <div className={s.formGroup}>
+              <h1>Create Playlist</h1>
+            </div>
           </div>
-        </div>
-      </a>
-
+        </a>
       </div>
     );
   }
