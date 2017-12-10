@@ -3,6 +3,7 @@ import rp from 'request-promise';
 const SpotifyActions = {
   createNewPlaylist,
   addSongsToPlaylist,
+  findSong
 };
 
 function createNewPlaylist(artist, tracks, user, res) {
@@ -52,6 +53,40 @@ function addSongsToPlaylist(options, playlist_id, tracks, user, res) {
       });
     } else {
       console.log('An error occurred when creating the playlist.');
+    }
+  }
+  return rp(options, callback);
+}
+
+function fixedEncodeURIComponent(str) {
+  return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
+    return '%' + c.charCodeAt(0).toString(16);
+  });
+}
+
+function findSong(artist, track, user, res) {
+  const artistQuery = fixedEncodeURIComponent(artist).replace(/%20/g, '+');
+  let trackQuery = track
+    .replace(/\//g, ' ')
+    .replace(/\\/g, ' ');
+  trackQuery = fixedEncodeURIComponent(trackQuery).replace(/%20/g, '+');
+
+  const url = `https://api.spotify.com/v1/search?q=artist:${artistQuery}%20track:${trackQuery}&type=track`;
+  const bearer_token = `Bearer ${user.access_token}`;
+  const options = {
+    url: url,
+    headers: {
+      Authorization: bearer_token,
+      Accept: 'application/json',
+    },
+    method: 'GET',
+    resolveWithFullResponse: true,
+  };
+  function callback(error, response, body) {
+    if ((!error && response.statusCode == 200) || response.statusCode == 201) {
+        res.status(200).send();
+    } else {
+      console.log('error');
     }
   }
   return rp(options, callback);

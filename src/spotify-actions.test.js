@@ -24,6 +24,28 @@ const res = {
 };
 
 describe('Unit Tests', () => {
+  test('findSong API call successful', async () => {
+    expect.assertions(2);
+    global.console = { log: jest.fn() };
+    const response = await SpotifyActions.findSong(
+      'Lorde', 'Green Light', user, res);
+    //expect(console.log).toBeCalledWith('The playlist was creasdfated.');
+    expect(response.statusCode).toBe(200);
+    let data = JSON.parse(response.body);
+    let responseFormatted = {
+      artist: data.tracks.items[0].artists[0].name,
+      track: data.tracks.items[0].name,
+      spotifyUri: data.tracks.items[0].uri,
+    };
+    expect(responseFormatted).toEqual({
+      artist: 'Lorde',
+      track: 'Green Light',
+      spotifyUri: "spotify:track:3I4QOvltiKcMu3xmnQjEct"
+    });
+  });
+});
+
+describe('Unit Tests', () => {
   test('addSongsToPlaylist() called on success of createNewPlaylist()', async () => {
     expect.assertions(2);
     SpotifyActions.addSongsToPlaylist = jest.spyOn(SpotifyActions,
