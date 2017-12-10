@@ -20,13 +20,25 @@ describe('Tests to verify that jest is working as intended.', () => {
   it('Empty Test.', () => {
     expect("").toBe("");
   });
+  it('Drake Test.', () => {
+    expect("Drake").toBe("Drake");
+  });
+  it('Subtraction Test.', () => {
+    expect(5 - 4).toBe(1);
+  });
 });
 
 describe('Unit Tests', () => {
-  test('fullSetListTest() should be called.', async () => {
+  test('getArtist() should be called.', async () => {
     SetListActions.getArtist = jest.spyOn(SetListActions,
       'fullSetlistTest');
-    const response = await SetListActions.fullSetlistTest();
+    const response = await SetListActions.fullSetlistTest('Drake');
     expect(SetListActions.getArtist).toBeCalled();
   });
+  test('Test if you can find Drake.', async () => {
+    let response = await SetListActions.fullSetlistTest('Drake');
+    response = JSON.parse(response);
+    expect(response.artist[0].name).toBe('Drake');
+  });
+
 });

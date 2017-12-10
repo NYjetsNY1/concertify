@@ -5,9 +5,9 @@ const SetListActions = {
   fullSetlistTest
 };
 
-function fullSetlistTest() {
-  const artistName = "Drake";
-  const artistActualName = "Drake";
+function fullSetlistTest(givenArtistName) {
+  const artistName = givenArtistName;
+  const artistActualName = givenArtistName;
   let MBID = '';
   let makeRequest = false;
 
@@ -54,7 +54,7 @@ function fullSetlistTest() {
       };
 
       if (makeRequest) {
-        return "Drake";
+        return givenArtistName;
       }
     }
   };
