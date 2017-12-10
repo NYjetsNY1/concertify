@@ -27,7 +27,6 @@ class Login extends React.Component {
           </div>
         </div>
       </a>
-
         <a href="/auth"><div className={s.cont2}>
           <div className={s.formGroup}>
             <h1>Create Playlist</h1>

@@ -8,21 +8,21 @@ describe('Header', () => {
     const wrapper = renderer
       .create(
         <App context={{ insertCss: () => {}, fetch: () => {} }}>
-          <Header></Header>
+          <Header />
         </App>,
       )
       .toJSON();
     expect(wrapper.type).toBe('div');
     expect(wrapper.props.className).toBe('root');
 
-    let inner_container = wrapper.children[0];
+    const inner_container = wrapper.children[0];
     expect(inner_container.type).toBe('div');
     expect(inner_container.props.className).toBe('container');
 
-    let nav_area = inner_container.children[0];
+    const nav_area = inner_container.children[0];
     expect(nav_area.props.role).toBe('navigation');
 
-    let brand_name = inner_container.children[1];
+    const brand_name = inner_container.children[1];
     expect(brand_name.type).toBe('a');
     expect(brand_name.props.className).toContain('brand');
     expect(brand_name.children[0]).toBe('Concertify');
