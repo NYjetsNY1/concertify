@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Layout renders children correctly 1`] = `
+<div>
+  <div
+    className="root"
+  >
+    <div
+      className="container"
+    >
+      <div
+        className="root"
+        role="navigation"
+      >
+        <a
+          className="link"
+          href="/about"
+          onClick={[Function]}
+        >
+          About
+        </a>
+        <span
+          className="spacer"
+        >
+           | 
+        </span>
+        <a
+          className="link"
+          href="/auth"
+        >
+          Log in
+        </a>
+      </div>
+      <a
+        className="brand"
+        href="/"
+        onClick={[Function]}
+      >
+        Concertify
+      </a>
+    </div>
+  </div>
+  <div
+    className="child"
+  />
+  <div
+    className="root"
+  >
+    <div
+      className="container"
+    >
+      <span
+        className="text"
+      >
+        © Concertify
+      </span>
+      <span
+        className="spacer"
+      >
+        ·
+      </span>
+      <a
+        className="link"
+        href="/"
+        onClick={[Function]}
+      >
+        Home
+      </a>
+    </div>
+  </div>
+</div>
+`;

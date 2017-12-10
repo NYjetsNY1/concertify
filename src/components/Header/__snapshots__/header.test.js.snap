@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header renders correct content 1`] = `
+<div
+  className="root"
+>
+  <div
+    className="container"
+  >
+    <div
+      className="root"
+      role="navigation"
+    >
+      <a
+        className="link"
+        href="/about"
+        onClick={[Function]}
+      >
+        About
+      </a>
+      <span
+        className="spacer"
+      >
+         | 
+      </span>
+      <a
+        className="link"
+        href="/auth"
+      >
+        Log in
+      </a>
+    </div>
+    <a
+      className="brand"
+      href="/"
+      onClick={[Function]}
+    >
+      Concertify
+    </a>
+  </div>
+</div>
+`;
