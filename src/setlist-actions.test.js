@@ -28,7 +28,12 @@ describe('Validate that Jest Works:', () => {
   });
 });
 
+
 describe('Unit Tests for SetList API:', () => {
+  
+  // If this test fails, try re-running. Could be the fact that
+  // jest quits after 5-6 seconds (standard timeout)
+  // and the call could take longer if the heroku proxy is slow.
   test('Test #1: getArtist() should be called.', async () => {
     SetListActions.getArtist = jest.spyOn(SetListActions,
       'fullSetlistTest');
