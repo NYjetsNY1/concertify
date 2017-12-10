@@ -10,7 +10,7 @@ import SetListActions from './setlist-actions';
 import 'babel-polyfill';
 
 // to test if jest is working at all -- should always pass.
-describe('Tests to verify that jest is working as intended.', () => {
+describe('Validate that Jest Works:', () => {
   it('If 2 + 2 does not equal 4, you know there is something seriously wrong. This should always pass.', () => {
     expect(2 + 2).toBe(4);
   });
@@ -28,14 +28,14 @@ describe('Tests to verify that jest is working as intended.', () => {
   });
 });
 
-describe('Unit Tests', () => {
-  test('getArtist() should be called.', async () => {
+describe('Unit Tests for SetList API:', () => {
+  test('Test #1: getArtist() should be called.', async () => {
     SetListActions.getArtist = jest.spyOn(SetListActions,
       'fullSetlistTest');
     const response = await SetListActions.fullSetlistTest('Drake');
     expect(SetListActions.getArtist).toBeCalled();
   });
-  test('Test if you can find Drake.', async () => {
+  test('Test #2: Example test to find artist.', async () => {
     let response = await SetListActions.fullSetlistTest('Drake');
     response = JSON.parse(response);
     expect(response.artist[0].name).toBe('Drake');
