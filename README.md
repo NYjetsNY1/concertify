@@ -10,7 +10,7 @@ Concertify is a mobile Web Application that enables users to build Spotify playl
 
 Tools
 =====
-Frontend
+# Frontend
 
 React-	Used for building and organizing view components and view management. Also used to keep basic state during the application
 
@@ -20,7 +20,7 @@ Moment JS - Library for date formatting and date handling
 
 Jest - Dom Testing
 
-Backend
+# Backend
 
 Node- All server side logic, some routing, spotify authentication management, some user state
 
@@ -30,13 +30,13 @@ Passport JS - Tool for third party OAuth. In our case, Passport was used with Sp
 
 Heroku- Site Deployment
 
-APIs
+# APIs
 
 Setlist API- Used for getting artist setlists into the app
 
 Spotify API- Used for OAuth and creating spotify playlists
 
-Database
+# Database
 
 No database needed 
 
