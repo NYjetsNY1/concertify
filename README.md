@@ -8,6 +8,20 @@ Overview
 ========
 Concertify is a mobile Web Application that enables users to build Spotify playlists based off of past concert setlists from various artists. With the help of concertify, users can attend a show, and then have the ability to see and listen to the songs that the artist played at the show. Concertify is simple, streamlined and intuitive, making it an excellent tool for avid concert geeks to enjoy past setlists from their favorite artists. 
 
+Instructions
+============
+Step 1: Clone Repo
+
+Step 2: cd into directory and run yarn install
+
+Step 3: run yarn start
+
+Step 4: page will be displayed on localhost:3000
+
+## Automated testing
+Specify Spotify access_token and user_id to use for testing in src/spotify-actions.test.js  
+and then run `yarn test`.
+
 Tools
 =====
 ### Frontend
@@ -39,7 +53,3 @@ Spotify API- Used for OAuth and creating spotify playlists
 ### Database
 
 No database needed 
-
-## Automated testing
-Specify Spotify access_token and user_id to use for testing in src/spotify-actions.test.js  
-and then run `yarn test`.
